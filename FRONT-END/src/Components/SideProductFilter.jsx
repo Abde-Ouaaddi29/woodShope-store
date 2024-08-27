@@ -1,19 +1,42 @@
 import Slider from "@mui/material/Slider";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { GetCategorie } from "../API/categories";
+import { useDispatch } from "react-redux";
+import { SETMINMAXPRICE, SETSEARCHVALUE } from "../REDUX/ProductReducer/ActionPr";
 
 const SideProductFilters = ({ handleToggleFilters }) => {
-  const [maxMinPrice, setMaxMinPrice] = useState([20, 37]);
-  function handleFilterByPrice() {}
+  const [maxMinPrice, setMaxMinPrice] = useState([11, 100]);
+  const [categories, setCategories] = useState([]);
+  const [searchV, setSearchV] = useState("");
+  const dispatch = useDispatch();
 
-  const categories = [
-    { category: "Bathroom", count: 4 },
-    { category: "Living Room", count: 7 },
-    { category: "Bedroom", count: 2 },
-    { category: "Cabinet", count: 4 },
-    { category: "Kitchen", count: 49 },
-  ];
+  function handleFilterByname() {
+    dispatch(SETSEARCHVALUE(searchV));
+    // document.querySelector('#search').value = ''
+    setSearchV("");
+  }
+
+  function handleFilterByPrice() {
+    if (maxMinPrice[0] !== 11 || maxMinPrice[1] !== 100) {
+      dispatch(SETMINMAXPRICE(maxMinPrice));
+    }
+  }
+
+  const fetchCategories = async () => {
+    try {
+      const response = await GetCategorie();
+      console.log(response);
+      setCategories(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <>
@@ -40,10 +63,15 @@ const SideProductFilters = ({ handleToggleFilters }) => {
         <div className="flex">
           <input
             type="text"
+            id="search"
             className=" ps-2 border"
             placeholder="Search Product"
+            onChange={(e) => setSearchV(e.target.value)}
           />
-          <button className="uppercase border bg-primary text-sm p-2 text-semi-black tracking-wide font-semibold">
+          <button
+            onClick={handleFilterByname}
+            className="uppercase border bg-primary text-sm p-2 text-semi-black tracking-wide font-semibold"
+          >
             Search
           </button>
         </div>
@@ -56,10 +84,7 @@ const SideProductFilters = ({ handleToggleFilters }) => {
           />
         </div>
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleFilterByPrice}
-            className="uppercase border bg-primary text-semi-black text-sm p-2 tracking-wide font-semibold"
-          >
+          <button onClick={handleFilterByPrice} className="uppercase border bg-primary text-semi-black text-sm p-2 tracking-wide font-semibold">
             filter
           </button>
           <p className=" tracking-wider">
@@ -72,11 +97,12 @@ const SideProductFilters = ({ handleToggleFilters }) => {
         <div className="mt-4  ">
           <h4 className="mb-5 text-xl font-semibold">Product categories</h4>
           <ul className="flex flex-col gap-2 p-2 overflow-y-auto h-[200px] ">
+            {/* { categories.length < 1 ? <span>no items</span> : ''} */}
             {categories &&
               categories.map((item) => {
                 return (
                   <CategoryItem
-                    key={item.category}
+                    key={item.id}
                     handleToggleFilters={handleToggleFilters}
                     item={item}
                   />
@@ -94,13 +120,13 @@ const CategoryItem = ({ item, handleToggleFilters }) => {
     <>
       <li className=" flex justify-between ">
         <Link
-          to={`category/${item.category}`}
+          to={`/category/${item.id}`}
           onClick={handleToggleFilters}
           className=" hover:text-secondary"
         >
-          {item.category}{" "}
+          {item.name}
         </Link>
-        <span>({item.count})</span>
+        <span>({item.product.length})</span>
       </li>
     </>
   );

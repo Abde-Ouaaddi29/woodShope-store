@@ -1,54 +1,62 @@
-import React, { useEffect, useRef, useState } from "react";
-import { EditCategory, ShowCategory } from "../../API/categories";
+import React, {useRef, useState } from "react";
+import { EditCategory } from "../../API/categories";
 import { useParams } from "react-router-dom";
 
-export default function UpdateCategory() {
+export default function UpdateCategory({categorie}) {
   const [isCategorySent, setIsCategorySent] = useState(false);
   const [ErrorCateg, setErrorCateg] = useState(false);
-  const [categorie, setCategorie] = useState([]);
 
   const newCategorie = useRef();
   const description = useRef();
-  const { id } = useParams();
-  console.log(categorie.id);
+  const imageCategory = useRef();
 
-  const fetchShowCategory = async () => {
-    try {
-      const response = await ShowCategory(id);
-      setCategorie(response)
-      console.log(categorie)
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
+  // const { id } = useParams();
+  console.log(categorie?.id);
 
-  useEffect(() => {
-    fetchShowCategory();
-  }, []);
+  // const fetchShowCategory = async () => {
+  //   try {
+  //     const response = await ShowCategory(id);
+  //     setCategorie(response)
+  //     console.log(categorie)
+  //   } catch (error) {
+  //     console.error("Error fetching categories:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchShowCategory();
+  // }, []);
 
   // const navigate = useNavigate();
 
   const HandleUpdateCategorie = async (e) => {
     e.preventDefault();
-    const valueName = newCategorie.current.value;
-    const valueDesc = description.current.value;
+    setIsCategorySent(false);
 
-    if (!valueName || !valueDesc) {
+    const formData = new FormData();
+    formData.append("name", newCategorie.current.value.trim());
+    formData.append("desc", description.current.value.trim());
+    formData.append("image", imageCategory.current.files[0]);
+    console.log("Form Data: ", [...formData.entries()]);
+
+    if (
+      !formData.get("name") ||
+      !formData.get("desc") 
+      // !formData.get("image")
+    ) {
       setErrorCateg(true);
       setIsCategorySent(false);
     } else {
       try {
-        const formData = new FormData();
-        formData.append("name", valueName);
-        formData.append("desc", valueDesc);
-        console.log("Form Data: ", [...formData.entries()]);
+        const id = await categorie.id;
 
-        const updatedCategory = await EditCategory(formData, categorie.id);
+        await EditCategory(formData, id);
+        newCategorie.current.value = "";
+        description.current.value = "";
+        imageCategory.current.value = "";
+
         setIsCategorySent(true);
         setErrorCateg(false);
-
-        const response = await ShowCategory(id);
-        setCategorie(response);
 
       } catch (error) {
         console.error("Error posting category:", error);
@@ -59,7 +67,7 @@ export default function UpdateCategory() {
   return (
     <>
       <div className="bg-gray-100 rounded-[10px] xl:px-14 px-5 py-10 shadow">
-        <form action="" className=" space-y-4 ">
+        <form action="" className=" space-y-4 " encType="multipart/form-data">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
             <div>
               <label className="" htmlFor="name">
@@ -77,7 +85,7 @@ export default function UpdateCategory() {
                 id="name"
                 type="text"
                 ref={newCategorie}
-                defaultValue={categorie.name}
+                // defaultValue={categorie.name}
               />
             </div>
             <div>
@@ -96,7 +104,23 @@ export default function UpdateCategory() {
                 id="description"
                 type="text"
                 ref={description}
-                defaultValue={categorie.desc}
+                // defaultValue={categorie.desc}
+              />
+            </div>
+            <div>
+              <label className="" htmlFor="imageCategory">
+                categorie image
+              </label>
+              {ErrorCateg ? <span className="text-red-400 ml-2">*</span> : ""}
+
+              <input
+                className={
+                  ErrorCateg
+                    ? "w-full outline-yellow-300 mt-2 rounded-lg border border-red-200 p-3 text-sm bg-white"
+                    : "w-full outline-yellow-300 mt-2 rounded-lg border border-gray-200 p-3 text-sm bg-white"
+                }
+                type="file"
+                ref={imageCategory}
               />
             </div>
           </div>

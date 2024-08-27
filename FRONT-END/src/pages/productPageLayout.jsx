@@ -1,23 +1,82 @@
 import { Outlet } from "react-router-dom";
 import ProductList from "../Components/ProductList";
 import SideProductFilters from "../Components/SideProductFilter";
-import { useState } from "react";
-// import NewCollection from "../Components/NewCollection";
+import { useEffect, useState } from "react";
+import {
+  FilterProductByName,
+  FilterProductByPrice,
+  GetProducts,
+} from "../API/products";
+import { FiLoader } from "react-icons/fi";
 import { useSelector } from "react-redux";
-// import { useFetch } from "../../server/useFetch";
 
 export default function Products() {
-
+  const [products, setProducts] = useState([]);
+  const [message, setMessage] = useState("");
   const [showFilters, setShowFilters] = useState(false);
-  
-  const list = useSelector((store) => store.products.products);
-  console.log('from productpage',list.products)
-  // useFetch()
 
-  
+  const searchValue = useSelector((state) => state.products.searchValue);
+  const MinMaxPrice = useSelector((state) => state.products.minMaxPrice);
+  console.log(searchValue);
+  console.log(MinMaxPrice);
+
+  /// fetchProducts1
+  const fetchProducts1 = async () => {
+    
+    try {
+      setMessage("loading...");
+      let response;
+
+      if (searchValue) {
+        response = await FilterProductByName(searchValue);
+      } else {
+        response = await GetProducts();
+      }
+
+      if (response) {
+        setProducts(response);
+      } else {
+        setMessage("No products");
+      }
+    } catch (error) {
+      setMessage("Connection issue!");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts1();
+  }, [searchValue]);
+
+  ///// fetchProducts2
+  const fetchProducts2 = async () => {
+    setMessage("loading...");
+
+    try {
+      let response;
+
+      if (MinMaxPrice && (MinMaxPrice[0] !== 11 || MinMaxPrice[1] !== 100)) {
+        response = await FilterProductByPrice(MinMaxPrice[0], MinMaxPrice[1]);
+      }
+      if (response) {
+        setProducts(response);
+      } else {
+        setMessage("No products");
+      }
+    } catch (error) {
+      setMessage("Connection issue!");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts2();
+  }, [MinMaxPrice]);
+
   function handleToggleFilters() {
     setShowFilters((prev) => !prev);
   }
+
   return (
     <>
       {showFilters && (
@@ -39,7 +98,15 @@ export default function Products() {
                 </span>
                 <span className=" uppercase">Options</span>
               </button>
-              <p className=" my-2">Showing 1–12 of 18 results</p>
+              {products.length > 0 ? (
+                <p className=" my-2">
+                  Showing 1 - {products.length} of {products.length} results
+                </p>
+              ) : (
+                // <span>show</span>
+                <span className=" my-2">{products.length} products </span>
+                // <span>show</span>
+              )}
             </div>
             <div className="">
               <form className="">
@@ -54,16 +121,26 @@ export default function Products() {
               </form>
             </div>
           </div>
+          {products.length < 1 ? (
+            <div className="flex justify-center items-center text-primary text-2xl p-4">
 
-          <ProductList/>
-
-          <p className="text-center px-3 py-1 w-fit m-auto my-5 border-semi-gray border">
-            No more products to show
-          </p>
+              {message === "loading..." ? (
+                <>
+                  <span className="text-primary">loading...</span>{" "}
+                  <FiLoader className="ml-3 stroke-primary text-3xl loader " />
+                </>
+              ) : (
+                message
+              )}
+            </div>
+          ) : (
+            <div className=" py-6">
+              <ProductList products={products} />
+            </div>
+          )}
+          
         </div>
       </div>
     </>
   );
-};
-
-
+}

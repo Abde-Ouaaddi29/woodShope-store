@@ -1,36 +1,31 @@
 import { Link } from "react-router-dom";
 import ProductList from "./ProductList";
+import { useEffect, useState } from "react";
+import { GetProducts } from "../API/products";
 const HomeMostSallingProduct = () => {
-  const list = [
-    {
-      id: 1928,
-      img: "https://websitedemos.net/home-decor-04/wp-content/uploads/sites/644/2020/08/kitchen-island-set-300x300.png",
-      name: "White Kitchen Island",
-      price: "5,350.75",
-      category: "Kitchen",
-    },
-    {
-      id: 2002,
-      img: "https://websitedemos.net/home-decor-04/wp-content/uploads/sites/644/2020/08/working-chair-with-armrest-300x300.png",
-      name: "Beige Working Chair With Armrest",
-      price: "784.00",
-      category: "Home Office",
-    },
-    {
-      id: 3229,
-      img: "https://websitedemos.net/home-decor-04/wp-content/uploads/sites/644/2020/08/king-size-master-bedroom-300x300.png",
-      name: "King Size Master Bedroom",
-      price: "14,500.50",
-      category: "Bedroom",
-    },
-    {
-      id: 9735,
-      img: "https://websitedemos.net/home-decor-04/wp-content/uploads/sites/644/2020/08/cream-ceramic-oval-bathtub-300x300.png",
-      name: "Ceramic Oval Bathtub",
-      price: "11,200.00",
-      category: "Bathroom",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [message, setMessage] = useState("");
+
+  const fetchProducts1 = async () => {
+    setMessage("loading...");
+
+    try {
+      let response;
+      response = await GetProducts();
+      setProducts(response);
+      if (!response) {
+        setMessage("No products");
+      }
+    } catch (error) {
+      setMessage("Connection issue!");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts1();
+  }, []);
+
   return (
     <div className="">
       <div className="container px-10 flex flex-col">
@@ -44,12 +39,12 @@ const HomeMostSallingProduct = () => {
           <h3 className="self-start text-xl font-semibold md:text-2xl lg:text-4xl">
             Discover Our Most Selling Products
           </h3>
-          <Link className="bg-primary self-end px-4 py-2  uppercase text-semi-black text-sm font-semibold">
-            view all best sellers
+          <Link to={'/products'} className="bg-primary self-end px-4 py-2  uppercase text-semi-black text-sm font-semibold">
+            view all Products
           </Link>
         </div>
         <div className="my-10">
-          <ProductList list={list} />
+          <ProductList products={products} />
         </div>
       </div>
     </div>

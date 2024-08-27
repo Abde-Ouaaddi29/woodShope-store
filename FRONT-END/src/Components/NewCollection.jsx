@@ -1,40 +1,36 @@
 import { Link } from "react-router-dom";
 import ProductList from "./ProductList";
+import { useEffect, useState } from "react";
+import { GetProducts } from "../API/products";
+import { FaLongArrowAltRight } from "react-icons/fa";
+
 export default function NewCollection() {
-  const ListProducts = [
-    {
-      id: 9735,
-      img: "https://websitedemos.net/home-decor-04/wp-content/uploads/sites/644/2020/08/cream-ceramic-oval-bathtub-300x300.png",
-      name: "Ceramic Oval Bathtub",
-      price: "11,200.00",
-      category: "Bathroom",
-    },
-    {
-      id: 9947,
-      img: "https://websitedemos.net/home-decor-04/wp-content/uploads/sites/644/2020/08/bathroom-wooden-table-300x300.png",
-      name: "Bathroom Wooden Table",
-      price: "550.00",
-      category: "Bathroom",
-    },
-    {
-      id: 7098,
-      img: "https://websitedemos.net/home-decor-04/wp-content/uploads/sites/644/2020/08/living-room-green-sofa-300x300.png",
-      name: "Green Living Room Sofa",
-      price: "1,840.00",
-      category: "Living Room",
-    },
-    {
-      id: 1022,
-      img: "https://websitedemos.net/home-decor-04/wp-content/uploads/sites/644/2020/08/single-blue-fabric-chair-1-300x300.png",
-      name: "Blue Comfy Fabric Chair",
-      price: "580.50",
-      category: "Bedroom",
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [message, setMessage] = useState("");
+
+  const fetchProducts1 = async () => {
+    setMessage("loading...");
+
+    try {
+      let response;
+      response = await GetProducts();
+      setProducts(response);
+      if (!response) {
+        setMessage("No products");
+      }
+    } catch (error) {
+      setMessage("Connection issue!");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts1();
+  }, []);
 
   return (
     <>
-      <div className="w-full lg:w-full xl:w-12/12 md:w-12/12 flex flex-wrap justify-between px-8 py-20">
+      <div className=" w-full lg:w-full xl:w-12/12 md:w-12/12 flex flex-wrap justify-between px-8 py-10 lg:py-20">
         <div className=" w-full lg:w-6/12 xl:w-6/12 md:w-10/12">
           <img
             className="w-full"
@@ -54,7 +50,7 @@ export default function NewCollection() {
 
             <div className="w-12/12 lg:w-10/12 xl:w-10/12 pt-12">
               <h2 className="font-bold text-[2rem] lg-text-[2.6rem] xl:text-[2.6rem] text-black leading-tight">
-                A Perfect Set For Your Living Room
+                A Perfect Set For Your Rooms
               </h2>
             </div>
             <div className="pt-6 leading-loose w-11/12 ">
@@ -66,135 +62,56 @@ export default function NewCollection() {
               </p>
             </div>
             <div className="w-full pt-7">
-              <button className="bg-primary w-7/12 px-4 py-3 text-semi-black tracking-widest text-[.8rem] font-semibold hover:bg-semi-gray hover:text-white hover:duration-700 hover:translate-y-0.5 ">
+              <Link
+                to={"/rooms"}
+                className="bg-primary w-7/12 px-4 py-3 text-semi-black tracking-widest text-[.8rem] font-semibold hover:bg-semi-gray hover:text-white hover:duration-700 hover:translate-y-0.5 "
+              >
                 SHOP THIS COLLECTION
-              </button>
+              </Link>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="px-8 py-6">
-        <ProductList list={ListProducts} />
-      </div>
+      {products.length > 0 ? (
+        <div className="px-10 py-5">
+          <ProductList products={products} />
+        </div>
+      ) : (
+        <>
+          {" "}
+          <div className=" px-10 text-xl text-primary ">{message}</div>{" "}
+        </>
+      )}
 
-      <div className=" w-full h-auto flex flex-wrap justify-between my-24 ">
-        <div className="w-full lg:w-3/12 xl:w-3/12 md:w-6/12 h-[82vh] relative">
+      <div className="grid lg:grid-cols-4 xl:grid-cols-4 md:grid-cols-2 grid-cols-1 my-24  ">
+        <CardCategory/>
+        <CardCategory/>
+        <CardCategory/>
+        <CardCategory/>
+       
+      </div>
+    </>
+  );
+
+
+}
+
+const CardCategory = () => {
+  return <>
+     <div className="h-[80vh] relative">
           <img
             className="w-full h-full object-cover"
             src="./src/Assets/living-room-bg.jpg"
             alt=""
           />
-          <div className="flex  w-auto absolute bottom-9 left-7 z-20">
-            <h1 className=" font-bold text-[1.6rem] text-white hover:text-secondary duration-500 ">
+          <div className="flex justify-center items-center group w-auto absolute bottom-9 left-7 z-20 ">
+            <h1 className=" font-bold text-[1.6rem] text-white group-hover:text-primary duration-500 ">
               <Link to={"rooms"}>Living Room</Link>
             </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="#bc9127"
-              className="w-6 h-6 mt-3 ml-2 hover:text-yellow-400 "
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-              />
-            </svg>
+            <FaLongArrowAltRight className="fill-white text-xl ml-2 mt-2 group-hover:fill-primary duration-500" />
           </div>
           <div className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-45 hover:opacity-60 hover:duration-300"></div>
         </div>
-
-        <div className="w-full lg:w-3/12 xl:w-3/12 md:w-6/12 h-[82vh] relative">
-          <img
-            className="w-full h-full object-cover"
-            src="./src/Assets/bedroom-bg.jpg"
-            alt=""
-          />
-          <div className="flex w-auto absolute bottom-9 left-7 z-20">
-            <h1 className=" font-bold text-[1.6rem] text-white hover:text-secondary duration-500 ">
-              <Link to={"rooms"}>Bedroom</Link>
-            </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="#bc9127"
-              className="w-6 h-6 mt-3 ml-2 hover:text-yellow-400 "
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-              />
-            </svg>
-          </div>
-
-          <div className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-45 hover:opacity-60 hover:duration-300"></div>
-        </div>
-
-        <div className="w-full lg:w-3/12 xl:w-3/12 md:w-6/12 h-[82vh] relative">
-          <img
-            className="w-full h-full object-cover"
-            src="./src/Assets/kitchen-bg.jpg"
-            alt=""
-          />
-          <div className="flex w-auto absolute bottom-9 left-7 z-20">
-            <h1 className=" font-bold text-[1.6rem] text-white hover:text-secondary duration-500 ">
-              {" "}
-              <Link to={"rooms"}>Kitchen</Link>
-            </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="#bc9127"
-              className="w-6 h-6 mt-3 ml-2 hover:text-yellow-400 "
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-              />
-            </svg>
-          </div>
-
-          <div className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-45 hover:opacity-60 hover:duration-300"></div>
-        </div>
-        <div className="w-full lg:w-3/12 xl:w-3/12 md:w-6/12  h-[82vh] relative">
-          <img
-            className="w-full h-full object-cover"
-            src="./src/Assets/bath-room-bg.jpg"
-            alt=""
-          />
-          <div className="flex w-auto absolute bottom-9 left-7 z-20">
-            <h1 className=" font-bold text-[1.6rem] text-white hover:text-secondary duration-500 ">
-              {" "}
-              <Link to={"rooms"}>Bath Room</Link>
-            </h1>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="#bc9127"
-              className="w-6 h-6 mt-3 ml-2 hover:text-yellow-400 "
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"
-              />
-            </svg>
-          </div>
-
-          <div className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-45 hover:opacity-60 hover:duration-300"></div>
-        </div>
-      </div>
-    </>
-  );
+  </>
 }

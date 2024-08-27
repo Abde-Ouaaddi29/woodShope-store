@@ -1,83 +1,43 @@
 // import PropTypes from "prop-types";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import { useFetch } from "../../server/useFetch";
-import { ADDTOCART } from "../REDUX/OrdersReducer/ActionsOr";
+import { Link } from "react-router-dom";
+import { MdOutlineAddShoppingCart } from "react-icons/md";
 
-// give it array of products check /data/db.json
-
-export default function ProductList(){
-  // useFetch()
-  const list = useSelector((state) => state.products.products.products);
-  const orders = useSelector((state) => state.orders.orders);
-
-  console.log('from productList', useSelector((store) => store));
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const HandleAddToCart = (id) => {
-    const order = orders.find((item) => item.id === id);
-    if (order) {
-      navigate(`/product/${id}`);
-    } else {
-      const product = list.find((item) => item.id === id)
-      dispatch(ADDTOCART(product, 1));
-    }
-  };
-
+export default function ProductList({ products, currentcategory }) {
+  const BaseUrl = "http://127.0.0.1:8000";
 
   return (
-
-    <ul className="grid grid-cols-2 max-[500px]:grid-cols-1  gap-2 md:grid-cols-3 lg:grid-cols-4 ">
-
-      { list && list.map((item) => {
-         return  ( <li key={item.id} className="p-1 relative  group  border text-center">
-                    <div
-                      onClick={() => HandleAddToCart(item.id)}
-                      className="hidden group absolute hover:shadow-md  cursor-pointer shadow-lg w-8 h-8 group-hover:grid  place-content-center rounded-full right-5 top-5 z-50"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        className="w-6 h-6 stroke-primary"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                        />
-                      </svg>
-                    </div>
-                        <Link to={`/product/${item.id}`}>
-                          <img
-                            src={item.img}
-                            className="max-w-full w-full "
-                            alt={item.name}
-                          />
-                          <div className="">
-                            <p>{item.category}</p>
-                            <h3 className="text-secondary">{item.name}</h3>
-                            <p>${item.price}</p>
-                          </div>
-                        </Link>
-                  </li> )
-       }) } 
+    <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 py-4">
+      {products &&
+        products.map((item, key) => {
+          return (
+            <li
+              key={key}
+              className="py-3 shadow-xl lg:shadow-none relative group text-center hover:shadow-2xl hover:scale-105 transition-all duration-700 "
+            >
+              <div className="group-hover:grid place-content-center hidden group absolute top-0 right-0 py-2 justify-end px-4">
+                <div className="p-2 bg-primary justify-end hover:inline-block rounded-full hover:bg-yellow-400 hover:scale-105 transition-all duration-500 cursor-pointer">
+                  <MdOutlineAddShoppingCart className="fill-white text-xl" />
+                </div>
+              </div>
+              <Link to={`/product/${item.id}`} className="">
+                <img
+                  src={`${BaseUrl}/${item.image}`}
+                  className="max-w-full w-full mt-1"
+                  alt={item.name}
+                />
+                <div className=" px-2">
+                  <p>
+                    {!currentcategory
+                      ? item.category?.name
+                      : currentcategory.name}
+                  </p>
+                  <h3 className="text-secondary">{item.name}</h3>
+                  <p>Dh {item.price}</p>
+                </div>
+              </Link>
+            </li>
+          );
+        })}
     </ul>
   );
-};
-
-
-// ProductList.propTypes = {
-//   list: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       id: PropTypes.number,
-//       img: PropTypes.string,
-//       name: PropTypes.string,
-//       category: PropTypes.string,
-//       price: PropTypes.string,
-//     })
-//   ),
-// };
-
+}

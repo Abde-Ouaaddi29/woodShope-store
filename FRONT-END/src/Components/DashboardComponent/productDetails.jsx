@@ -7,6 +7,7 @@ import { FiLoader } from "react-icons/fi";
 
 export default function ProductDetails() {
   const [currentProduct, setCurrentProduct] = useState();
+  const [loading, setLoading] = useState('');
   const [messageDelete, setMessageDelete] = useState(
     "Do you want to delete the product ?"
   );
@@ -17,11 +18,18 @@ export default function ProductDetails() {
 
   const fetchShowProduct = async () => {
     try {
+      setLoading('Loading...')
       const response = await ShowProduct(id);
       console.log(response);
       setCurrentProduct(response);
+
+      if(response.ok){
+        setLoading('some thing went wrong !')
+      }
+
     } catch (err) {
       console.log(err);
+      setLoading('connection issue !')
     }
   };
 
@@ -55,10 +63,8 @@ export default function ProductDetails() {
   if (!currentProduct) {
     return (
       <div className="flex items-center justify-center text-primary h-[80vh] text-2xl -z-10">
-        {/* Loading... <FiLoader className="ml-3 stroke-primary text-4xl loader -z-10" /> */}
-        <span className="text-primary">No product</span>
+        {loading === 'Loading...' ? <> <span className="text-primary">Loading...</span> <FiLoader className="ml-3 stroke-primary text-4xl loader -z-10" /> </> : loading}
       </div>
-   
     );
   }
 
@@ -70,18 +76,18 @@ export default function ProductDetails() {
             className="hover:scale-125 transition-all duration-500"
             src={`${baseUrl}/${currentProduct?.image}`} 
             alt={currentProduct?.name}
-          /> || <FiLoader className="ml-3 stroke-primary text-xl loader -z-10" />
+          /> 
         </div>
         <div className="p-4">
           <div>
             <span className="text-gray-400 ">
               Dashboard / {currentProduct?.category.name} /{" "}
-              {currentProduct?.name} || <FiLoader className="ml-3 stroke-primary text-xl loader -z-10" />
+              {currentProduct?.name} 
             </span>
           </div>
           <div className="mt-3">
             <span className="text-4xl font-semibold">
-              {currentProduct?.name} || <FiLoader className="ml-3 stroke-primary text-xl loader -z-10" />
+              {currentProduct?.name} 
             </span>
           </div>
           <div className="mt-6">
@@ -91,12 +97,12 @@ export default function ProductDetails() {
             </span>
           </div>
           <div className="mt-6 border-b pb-8 ">
-            <span className="text-[17px]">{currentProduct?.description} || <FiLoader className="ml-3 stroke-primary text-xl loader -z-10" /> </span>
+            <span className="text-[17px]">{currentProduct?.description}  </span>
           </div>
           <div className="mt-3 pb-8 ">
             <span className="font-semibold hover:underline ">
               {" "}
-              category : {currentProduct?.category.name}{" "} || <FiLoader className="ml-3 stroke-primary text-xl loader -z-10" />
+              category : {currentProduct?.category.name}{" "} 
             </span>
           </div>
           <div className="mt-3 p-4 rounded font-semibold bg-red-200 text-red-700 flex items-center justify-between">

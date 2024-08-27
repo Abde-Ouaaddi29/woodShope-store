@@ -24,17 +24,32 @@ class CategoryController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => 'required|string|unique:categories,name|max:255',
+            "name" => "sometimes|string|unique:categories,name",
             'desc' => 'required|string',
+            'image' => 'required|image'
         ]);
 
-        Category::create($request->all());
 
-        return response()->json([
-            'message' => 'Category created successfully',
-            'data' =>  $request->name
-        ], 201);
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images', 'public');
+
+            $category = Category::create([
+                'name' => $request->name,
+                'desc' => $request->desc,
+                'image' => 'storage/' . $path
+            ]);
+
+            return response()->json([
+                'message' => 'Category created successfully',
+                'data' =>  $category
+            ], 201);
+        } else {
+            return response()->json([
+                'message' => 'Image upload failed',
+            ], 422);
+        }
     }
+
 
 
     /**
@@ -52,23 +67,34 @@ class CategoryController extends Controller
     public function update(Request $request, string $id): JsonResponse
     {
         $category = Category::findOrFail($id);
-        
+
         $request->validate([
-            "name" => "sometimes|string|unique:categories,name," . $id,
-            "desc" => "sometimes|string"
+            'name' => 'required|string|unique:categories,name|max:255',
+            'desc' => 'required|string',
+            'image' => 'required|image'
         ]);
-    
-        // Log the incoming request data
-        \Log::info('Updating category:', $request->only(['name', 'desc']));
-    
-        $category->update($request->only(['name', 'desc']));
-    
-        return response()->json([
-            "message" => "it is updated",
-            "data" => $category
-        ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images', 'public');
+
+            $categorie = $category->update([
+                'name' => $request->name,
+                'desc' => $request->desc,
+                'image' => 'storage/' . $path
+            ]);
+
+            return response()->json([
+                'message' => 'Category updated successfully',
+                'data' =>  $categorie
+            ], 201);
+        } else {
+            return response()->json([
+                'message' => 'Image upload failed',
+            ], 422);
+        }
+        
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -77,7 +103,7 @@ class CategoryController extends Controller
     {
         Category::destroy($id);
         return response()->json([
-         "message" => "category is deleted !"
+            "message" => "category is deleted !"
         ]);
     }
 }

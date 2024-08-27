@@ -6,7 +6,7 @@ import { FiLoader } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 
 export default function CategoryDetails() {
-  const [categorie, setCategorie] = useState([]);
+  const [categorie, setCategorie] = useState('');
   const [messageDelete, setMessageDelete] = useState(
     "Do you want to delete this category ?"
   );
@@ -39,9 +39,8 @@ export default function CategoryDetails() {
       }
       setMessageDelete("The category is deleted successfully");
       setTimeout(() => {
-        navigate('/dashboard/categories')
-      },3000)
-
+        navigate("/dashboard/categories");
+      }, 3000);
     } catch (err) {
       console.log(err.message);
     }
@@ -53,6 +52,9 @@ export default function CategoryDetails() {
         Category Information
       </div>
       <div className="mb-4">
+        <div className="font-semibold mb-4 ">
+          <img className="object-cover rounded" src={`${baseUrl}/${categorie.image}`} alt="" />
+        </div>
         <div className="font-semibold mb-3">
           <span className=""> category's name :</span>{" "}
           <span className="font-light ">
@@ -60,7 +62,7 @@ export default function CategoryDetails() {
             {categorie.name || "loading..."}{" "}
           </span>
         </div>
-        <div className="font-semibold ">
+        <div className="font-semibold mb-3 ">
           <span className="">category's description :</span>{" "}
           <span className="font-light"> {categorie.desc || "loading..."} </span>
         </div>
@@ -110,13 +112,17 @@ export default function CategoryDetails() {
           Modifier des Informations
         </div>
         <div className="my-6">
-          <UpdateCategory />
+          <UpdateCategory categorie={categorie} />
         </div>
       </div>
       <div className=" border-l-2 border-red-700 bg-red-100 p-4 lg:mt-0 flex justify-between items-center">
         <span className="text-red-700 font-semibold lg:text-xl text-sm ">
           {" "}
-          <span className="font-light text-red-700 ">  {categorie.name} | </span>   {messageDelete} 
+          <span className="font-light text-red-700 ">
+            {" "}
+            {categorie.name} |{" "}
+          </span>{" "}
+          {messageDelete}
         </span>
         <span onClick={handleDestroyCategory}>
           <MdDelete className="stroke-red-700 cursor-pointer fill-red-700 text-2xl hover:-scale-x-105 transition-all hover:fill-red-500 duration-500" />

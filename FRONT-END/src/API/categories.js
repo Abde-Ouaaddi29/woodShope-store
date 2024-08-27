@@ -1,3 +1,5 @@
+import { json } from "react-router-dom";
+
 export const GetCategorie = async () => {
     try {
       const response = await fetch('http://127.0.0.1:8000/api/categories', {
@@ -39,33 +41,31 @@ export const ShowCategory = async (id) => {
   }
 }
 
-export const PostCategorie = async (name, desc) => {
+export const PostCategorie = async (formData) => {
   try {
     const response = await fetch('http://127.0.0.1:8000/api/categories', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name ,desc })
+      body: formData
       // we should add {name} as the origin name in backend or we can use this methode {name:value}
     });
 
     if (response.ok) {
       const data = await response.json();
+      console.log(data)
       return data;
     } else {
       throw new Error('Failed to post categories');
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 };
 
-export const EditCategory = async (formData, id) => {
+export const EditCategory = async ({formData, id}) => {
   try {
     const response = await fetch(`http://127.0.0.1:8000/api/categories/${id}`, {
       method : "PUT",
-      body: formData
+      body: JSON.stringify({formData:formData}) 
     });
 
     if (response.ok) {

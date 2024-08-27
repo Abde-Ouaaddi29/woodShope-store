@@ -35,7 +35,7 @@ export default function CategoriesList() {
             </Link>
           </div>
         </div>
-        {categories && categories.length > 1 ? (
+        {categories && categories.length > 0 ? (
           <div className="overflow-y-auto max-h-[73vh] mt-2 p-4">
             <CategoryCard categories={categories} />
           </div>

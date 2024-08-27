@@ -12,6 +12,7 @@ export default function ProductsList() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [selectedValue, setSelectedValue] = useState("");
+  const [loading, setLoading] = useState("");
 
   useEffect(() => {
     const fetchCategory = async () => {
@@ -29,21 +30,34 @@ export default function ProductsList() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading("loading...");
+
         if (selectedValue) {
-          const filteredProducts = await FilterProductsByCategory(selectedValue);
+          const filteredProducts = await FilterProductsByCategory(
+            selectedValue
+          );
           setProducts(filteredProducts);
+          if (!filteredProducts.ok) {
+            setLoading("No product");
+          }
+
         } else {
           const products = await GetProducts();
           setProducts(products);
+          if (!products.ok) {
+            setLoading("No product");
+          }
+
         }
+
       } catch (error) {
         console.error("Error fetching products:", error);
+        setLoading("connection issue !");
       }
     };
 
     fetchProducts();
   }, [selectedValue]);
-
 
   return (
     <div className="lg:mt-0 mt-10">
@@ -64,7 +78,7 @@ export default function ProductsList() {
             <option value="">Choose category</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
-                {category.name} || loading...
+                {category.name}
               </option>
             ))}
           </select>
@@ -74,8 +88,7 @@ export default function ProductsList() {
         <ProductCart products={products} />
       ) : (
         <div className="flex items-center justify-center text-primary h-[70vh] text-2xl -z-10">
-        {/* Loading...  <FiLoader className="ml-3 stroke-primary text-4xl loader -z-10" /> */}
-        No products
+          {loading === 'loading...' ? <> <span className="text-primary">Loading...</span>  <FiLoader className="ml-3 stroke-primary text-4xl loader -z-10" /></> : loading}
         </div>
       )}
     </div>

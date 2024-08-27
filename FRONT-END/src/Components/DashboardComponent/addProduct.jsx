@@ -19,9 +19,10 @@ export default function AddProduct() {
   const [isCategorySent, setIsCategorySent] = useState(false);
   const navigate = useNavigate();
 
-
   const newCategorie = useRef();
   const description = useRef();
+  const imageCategory = useRef();
+
   const name = useRef();
   const image = useRef();
   const price = useRef();
@@ -48,17 +49,28 @@ export default function AddProduct() {
 
   const HandleAddCategorie = async (e) => {
     e.preventDefault();
-    const valueName = newCategorie.current.value;
-    const valueDesc = description.current.value;
-    if (!valueName || !valueDesc) {
+    setIsCategorySent(false);
+    const formData = new FormData();
+    formData.append("name", newCategorie.current.value.trim());
+    formData.append("desc", description.current.value.trim());
+    formData.append("image", imageCategory.current.files[0]);
+
+    if (
+      !formData.get("name") ||
+      !formData.get("desc") ||
+      !formData.get("image")
+    ) {
       setErrorCateg(true);
       setIsCategorySent(false);
     } else {
       try {
-        await PostCategorie(valueName, valueDesc);
-        setIsCategorySent(true);
+        await PostCategorie(formData);
         newCategorie.current.value = "";
         description.current.value = "";
+        imageCategory.current.value = "";
+
+        setIsCategorySent(true);
+
         setErrorCateg(false);
         fetchCategories();
         setTimeout(() => {
@@ -309,14 +321,15 @@ export default function AddProduct() {
             </div>
 
             <div className="mt-4">
-                <button
-                  type="submit"
-                  onClick={handleAddProduct}
-                  className="inline-block rounded-lg bg-primary px-5 py-3 font-medium text-white tracking-wider w-full mt-8 hover:bg-yellow-400 hover:scale-105 transition-all duration-700"
-                >
-                  {" "}
-                  Ajouter le produit{" "}
-                </button>    </div>
+              <button
+                type="submit"
+                onClick={handleAddProduct}
+                className="inline-block rounded-lg bg-primary px-5 py-3 font-medium text-white tracking-wider w-full mt-8 hover:bg-yellow-400 hover:scale-105 transition-all duration-700"
+              >
+                {" "}
+                Ajouter le produit{" "}
+              </button>{" "}
+            </div>
           </form>
         </div>
       </div>
@@ -344,7 +357,7 @@ export default function AddProduct() {
       )}
 
       <div className="bg-gray-100 rounded-[10px] xl:px-14 px-5 py-10 shadow">
-        <form action="" className=" space-y-4 ">
+        <form encType="multipart/form-data">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
             <div>
               <label className="" htmlFor="name">
@@ -380,6 +393,22 @@ export default function AddProduct() {
                 id="description"
                 type="text"
                 ref={description}
+              />
+            </div>
+            <div>
+              <label className="" htmlFor="imageCategory">
+                categorie image
+              </label>
+              {ErrorCateg ? <span className="text-red-400 ml-2">*</span> : ""}
+
+              <input
+                className={
+                  ErrorCateg
+                    ? "w-full outline-yellow-300 mt-2 rounded-lg border border-red-200 p-3 text-sm bg-white"
+                    : "w-full outline-yellow-300 mt-2 rounded-lg border border-gray-200 p-3 text-sm bg-white"
+                }
+                type="file"
+                ref={imageCategory}
               />
             </div>
           </div>

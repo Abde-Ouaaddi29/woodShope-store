@@ -20,10 +20,16 @@ class ProductController extends Controller
             $query->where('category_id', $request->input('category_id'));
         }
 
-        if ($request->has('price')) {
-            $query->where('price', $request->input('price'));
+        if($request->has('priceMin') && $request->has('priceMax')) {
+           $query->whereBetween('price', [$request->input('priceMin'), $request->input('priceMax')]);
         }
 
+        if($request->has('name')){
+            $query->where('name', 'like', '%' . $request->input('name') . '%');
+        }
+
+        $query->inRandomOrder();
+        
         $products = $query->get();
         return response()->json($products);
     }

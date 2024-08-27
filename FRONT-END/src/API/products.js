@@ -49,11 +49,22 @@ export const FilterProductsByCategory = async (categoryId) => {
     }
 };
 
-export const FilterProductByPrice = async (price) => {
+export const FilterProductByPrice = async (priceMin, priceMax) => {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/products?price=${price}`);
-        const data = await response.fetch();
+        const response = await fetch(`http://127.0.0.1:8000/api/products?priceMin=${priceMin}&priceMax=${priceMax}`);
+        const data = await response.json();
         console.log('filterd products by price:', data)
+        return data;
+    } catch (error) {
+        console.error('Error fetching products:', error);
+    }
+};
+
+export const FilterProductByName = async (name) => {
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/products?name=${name}`);
+        const data = await response.json();
+        console.log('filterd products by name:', data)
         return data;
     } catch (error) {
         console.error('Error fetching products:', error);
