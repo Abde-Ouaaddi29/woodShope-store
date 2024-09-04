@@ -1,21 +1,25 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): JsonResponse
     {
         $query = Category::with('product');
         $categories = $query->get();
-        return response()->json($categories, 200);
+
+        if($categories->count() > 0){
+            return response()->json(['categories' => $categories], 200);
+        } else {
+            return response()->json(['message' => 'No categories '], 200);
+        }
+        
     }
 
     /**
@@ -24,7 +28,7 @@ class CategoryController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            "name" => "sometimes|string|unique:categories,name",
+            "name" => "required|string|unique:categories,name",
             'desc' => 'required|string',
             'image' => 'required|image'
         ]);
@@ -106,4 +110,5 @@ class CategoryController extends Controller
             "message" => "category is deleted !"
         ]);
     }
+
 }

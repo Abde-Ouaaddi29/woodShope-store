@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { BASE_URL } from "../../constants";
 
 export default function CategoryCard({ categories }) {
-  const BaseUrl = 'http://127.0.0.1:8000';
   console.log("categories", categories);
   return (
     <>
@@ -15,7 +15,7 @@ export default function CategoryCard({ categories }) {
                 className="border mt-6 p-4 bg-gray-50 hover:bg-white hover:shadow-xl transition-all duration-700 hover:scale-95 hover:border-none"
               >
                 <div className="flex justify-between border-b pb-3">
-                <img className="w-20 h-20 rounded-full" src={`${BaseUrl}/${category.image}`} alt= {category.name} />
+                <img className="w-20 h-20 rounded-full" src={`${BASE_URL}/${category.image}`} alt= {category.name} />
 
                   <div className="text-yellow-700">
                     <span className="font-light text-yellow-700">

@@ -1,8 +1,8 @@
-import { json } from "react-router-dom";
+import { BaseApiUrl } from "../constants";
 
 export const GetCategorie = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/categories', {
+      const response = await fetch(`${BaseApiUrl}/categories`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -25,11 +25,12 @@ export const GetCategorie = async () => {
   
 export const ShowCategory = async (id) => {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/categories/${id}`, {
+    const response = await fetch(`${BaseApiUrl}/categories/${id}`, {
       method: "GET",
       headers:{
         "Content-Type" : "application/json"
       },
+      credentials: "include" 
     });
     
     const data = await response.json();
@@ -43,8 +44,9 @@ export const ShowCategory = async (id) => {
 
 export const PostCategorie = async (formData) => {
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/categories', {
+    const response = await fetch('${BaseApiUrl}/categories', {
       method: 'POST',
+      credentials: "include" ,
       body: formData
       // we should add {name} as the origin name in backend or we can use this methode {name:value}
     });
@@ -63,8 +65,9 @@ export const PostCategorie = async (formData) => {
 
 export const EditCategory = async ({formData, id}) => {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/categories/${id}`, {
+    const response = await fetch(`${BaseApiUrl}/categories/${id}`, {
       method : "PUT",
+      credentials: "include",
       body: JSON.stringify({formData:formData}) 
     });
 
@@ -85,7 +88,7 @@ export const EditCategory = async ({formData, id}) => {
 
 export const DestroyCategory = async (id) => {
  try {
-   const response = await fetch(`http://127.0.0.1:8000/api/categories/${id}`, {
+   const response = await fetch(`${BaseApiUrl}/categories/${id}`, {
     method: "delete",
    });
 

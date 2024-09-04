@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('feedback', function (Blueprint $table) {
+        Schema::create('table_users', function (Blueprint $table) {
             $table->id();
-            $table->text('message');
-            $table->string('status')->default('post');
-            $table->unsignedBigInteger('user_id');
             $table->timestamps();
-
-            // $table->foreign('user_id')->references('id')->on('users');
-
         });
     }
 
@@ -28,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('feedback');
+        Schema::dropIfExists('table_users');
     }
 };

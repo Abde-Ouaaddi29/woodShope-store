@@ -1,9 +1,10 @@
 // import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
+import { BASE_URL } from "../constants.js";
+
 
 export default function ProductList({ products, currentcategory }) {
-  const BaseUrl = "http://127.0.0.1:8000";
 
   return (
     <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 py-4">
@@ -21,7 +22,7 @@ export default function ProductList({ products, currentcategory }) {
               </div>
               <Link to={`/product/${item.id}`} className="">
                 <img
-                  src={`${BaseUrl}/${item.image}`}
+                  src={`${BASE_URL}/${item.image}`}
                   className="max-w-full w-full mt-1"
                   alt={item.name}
                 />

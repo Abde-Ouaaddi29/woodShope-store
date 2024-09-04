@@ -73,9 +73,9 @@ export default function AddProduct() {
 
         setErrorCateg(false);
         fetchCategories();
-        setTimeout(() => {
-          navigate("/dashboard/categories");
-        }, 2000);
+        // setTimeout(() => {
+        //   navigate("/dashboard/categories");
+        // }, 2000);
       } catch (error) {
         console.error("Error posting category:", error);
       }

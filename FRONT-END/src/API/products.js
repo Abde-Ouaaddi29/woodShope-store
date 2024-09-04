@@ -1,6 +1,8 @@
+import { BaseApiUrl } from "../constants";
+
 export const GetProducts = async () => {
     try { 
-        const response = await fetch(`http://127.0.0.1:8000/api/products`, {
+        const response = await fetch(`${BaseApiUrl}/products`, {
             method:"GET",
             headers:{
                 "Content-Type":"application/json"
@@ -23,11 +25,11 @@ export const GetProducts = async () => {
 
 export const ShowProduct = async (id) => {
     try {
-     const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
+     const response = await fetch(`${BaseApiUrl}/products/${id}`, {
         method:"GET",
-        headers:{
-            "Content-Type":"application/json"
-        }
+        headers: {
+            "Content-type":"application/json"
+        },
      });
      const data = await response.json();
      console.log('show', data)
@@ -40,7 +42,7 @@ export const ShowProduct = async (id) => {
 
 export const FilterProductsByCategory = async (categoryId) => {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/products?category_id=${categoryId}`);
+        const response = await fetch(`${BaseApiUrl}/products?category_id=${categoryId}`);
         const data = await response.json();
         console.log('filterd products by category:', data);
         return data;
@@ -51,7 +53,7 @@ export const FilterProductsByCategory = async (categoryId) => {
 
 export const FilterProductByPrice = async (priceMin, priceMax) => {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/products?priceMin=${priceMin}&priceMax=${priceMax}`);
+        const response = await fetch(`${BaseApiUrl}/products?priceMin=${priceMin}&priceMax=${priceMax}`);
         const data = await response.json();
         console.log('filterd products by price:', data)
         return data;
@@ -62,7 +64,7 @@ export const FilterProductByPrice = async (priceMin, priceMax) => {
 
 export const FilterProductByName = async (name) => {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/products?name=${name}`);
+        const response = await fetch(`${BaseApiUrl}/products?name=${name}`);
         const data = await response.json();
         console.log('filterd products by name:', data)
         return data;
@@ -73,8 +75,14 @@ export const FilterProductByName = async (name) => {
 
 export const PostProducts = async (formData) => {
     try { 
-        const response = await fetch('http://127.0.0.1:8000/api/products', {
+        // const adminToken = localStorage.getItem('adminToken')
+        const response = await fetch(`${BaseApiUrl}/products`, {
             method:"POST",
+            credentials:"include",
+            headers: {
+                "Content-type":"application/json",
+                //  "Authorization": `Bearer ${adminToken}`
+            },
             body:formData
         })
 
@@ -94,8 +102,14 @@ export const PostProducts = async (formData) => {
 
 export const EditProduct = async (formData, id) => {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
+        // const adminToken = localStorage.getItem('adminToken')
+        const response = await fetch(`${BaseApiUrl}/products/${id}`, {
             method: "PUT",
+            credentials: "include" ,
+            headers: {
+                "Content-type":"application/json",
+                //  "Authorization": `Bearer ${adminToken}`
+            },
             body: formData,
         });
 
@@ -117,8 +131,13 @@ export const EditProduct = async (formData, id) => {
 
 export const DestroyProduct = async (id) => {
  try {
-  const response = await fetch(`http://127.0.0.1:8000/api/products/${id}`, {
-    method: "delete"
+  const adminToken = localStorage.getItem('adminToken')
+  const response = await fetch(`${BaseApiUrl}/products/${id}`, {
+    method: "delete",
+    headers: {
+        "Content-type":"application/json",
+         "Authorization": `Bearer ${adminToken}`
+    },
   });
 
   const data = await response.json();

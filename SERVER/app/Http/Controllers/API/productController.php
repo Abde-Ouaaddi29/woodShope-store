@@ -1,17 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
-class OrderItemController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $products = Product::get();
+
+        if ($products) {
+            return response()->json([
+                'data' => $products,
+                'userData' => auth()->user() ? auth()->user()->id : null
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'No record available ! '
+            ], 200);
+        }
     }
 
     /**

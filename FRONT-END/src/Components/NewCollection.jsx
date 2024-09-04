@@ -3,10 +3,27 @@ import ProductList from "./ProductList";
 import { useEffect, useState } from "react";
 import { GetProducts } from "../API/products";
 import { FaLongArrowAltRight } from "react-icons/fa";
+import { GetCategorie } from "../API/categories";
 
 export default function NewCollection() {
   const [products, setProducts] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [message, setMessage] = useState("");
+
+  const fetchRooms = async () => {
+    setMessage("loading...");
+    try {
+      const response = await GetCategorie();
+      setRooms(response);
+      console.log(response);
+      if (!response) {
+        setMessage("No rooms");
+      }
+    } catch (error) {
+      console.error(error.message);
+      setMessage("connection issue !");
+    }
+  };
 
   const fetchProducts1 = async () => {
     setMessage("loading...");
@@ -26,6 +43,7 @@ export default function NewCollection() {
 
   useEffect(() => {
     fetchProducts1();
+    fetchRooms();
   }, []);
 
   return (
@@ -84,34 +102,39 @@ export default function NewCollection() {
         </>
       )}
 
-      <div className="grid lg:grid-cols-4 xl:grid-cols-4 md:grid-cols-2 grid-cols-1 my-24  ">
-        <CardCategory/>
-        <CardCategory/>
-        <CardCategory/>
-        <CardCategory/>
-       
+      <div className="grid lg:grid-cols-4 xl:grid-cols-5 md:grid-cols-2 grid-cols-1 my-24  ">
+        {rooms &&
+          rooms.map((item) => {
+            return (
+              <>
+                <CardCategory item={item} />
+              </>
+            );
+          })}
       </div>
     </>
   );
-
-
 }
 
-const CardCategory = () => {
-  return <>
-     <div className="h-[80vh] relative">
-          <img
-            className="w-full h-full object-cover"
-            src="./src/Assets/living-room-bg.jpg"
-            alt=""
-          />
-          <div className="flex justify-center items-center group w-auto absolute bottom-9 left-7 z-20 ">
-            <h1 className=" font-bold text-[1.6rem] text-white group-hover:text-primary duration-500 ">
-              <Link to={"rooms"}>Living Room</Link>
-            </h1>
-            <FaLongArrowAltRight className="fill-white text-xl ml-2 mt-2 group-hover:fill-primary duration-500" />
-          </div>
-          <div className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-45 hover:opacity-60 hover:duration-300"></div>
+const CardCategory = ({ item }) => {
+  const BaseUrl = "http://127.0.0.1:8000";
+
+  return (
+    <>
+      <div className="h-[80vh] relative">
+        <img
+          className="w-full h-full object-cover"
+          src={`${BaseUrl}/${item.image}`}
+          alt={item.name}
+        />
+        <div className="flex justify-center items-center group w-auto absolute bottom-9 left-7 z-20 ">
+          <h1 className=" font-bold text-[1.6rem] text-white group-hover:text-primary duration-500 ">
+            <Link to={`category/${item.id}`}>{item.name}</Link>
+          </h1>
+          <FaLongArrowAltRight className="fill-white text-xl ml-2 mt-2 group-hover:fill-primary duration-500" />
         </div>
-  </>
-}
+        <div className="absolute top-0 bottom-0 left-0 right-0 bg-black opacity-45 hover:opacity-60 hover:duration-300"></div>
+      </div>
+    </>
+  );
+};

@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import { BASE_URL } from "../../constants";
 
 export default function ProductCart({ products }) {
-  const baseUrl = "http://localhost:8000";
-  console.log(baseUrl);
+  // const baseUrl = "http://localhost:8000";
+  console.log(BASE_URL);
 
   return (
     <div className="lg:py-4 mt-4 grid lg:grid-cols-4 grid-cols-2 md:grid-cols-3 gap-6">
@@ -16,7 +17,7 @@ export default function ProductCart({ products }) {
             <div className="h-auto">
               <img
                 className="h-full hover:scale-110 transition-all duration-500"
-                src={`${baseUrl}/${product.image}`}
+                src={`${BASE_URL}/${product.image}`}
                 alt={product.name}
               />
             </div>

@@ -3,15 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
 
 class Admin extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory;
 
-    protected $guard = 'admin';
+    protected $table = 'admins';
 
     protected $fillable = [
         'name',
@@ -19,14 +19,9 @@ class Admin extends Authenticatable
         'password',
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-
     public function user()
     {
         return $this->hasMany(User::class);
     }
+
 }

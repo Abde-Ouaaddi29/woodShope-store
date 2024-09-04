@@ -4,6 +4,8 @@ import { DestroyCategory, ShowCategory } from "../../API/categories";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiLoader } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
+import { BASE_URL } from "../../constants";
+
 
 export default function CategoryDetails() {
   const [categorie, setCategorie] = useState('');
@@ -11,7 +13,6 @@ export default function CategoryDetails() {
     "Do you want to delete this category ?"
   );
   const { id } = useParams();
-  const baseUrl = "http://localhost:8000";
   const navigate = useNavigate();
 
   const fetchShowCategory = async () => {
@@ -53,7 +54,7 @@ export default function CategoryDetails() {
       </div>
       <div className="mb-4">
         <div className="font-semibold mb-4 ">
-          <img className="object-cover rounded" src={`${baseUrl}/${categorie.image}`} alt="" />
+          <img className="object-cover rounded" src={`${BASE_URL}/${categorie.image}`} alt="" />
         </div>
         <div className="font-semibold mb-3">
           <span className=""> category's name :</span>{" "}
@@ -87,7 +88,7 @@ export default function CategoryDetails() {
                   <div className="border-b-2 mb-3 flex justify-center items-center">
                     <img
                       className=" h-36 hover:scale-105 transition-all duration-700"
-                      src={`${baseUrl}/${item.image}`}
+                      src={`${BASE_URL}/${item.image}`}
                       alt="image"
                     />
                   </div>

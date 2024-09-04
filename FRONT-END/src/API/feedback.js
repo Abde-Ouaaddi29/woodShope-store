@@ -1,6 +1,8 @@
+import { BaseApiUrl } from "../constants";
+
 export const GetFeedback = async () => {
  try {
-   const response = await fetch(`http://127.0.0.1:8000/api/feedback`, {
+   const response = await fetch(`${BaseApiUrl}/feedback`, {
     method: "GET",
     headers: {
         "Content-Type" : "application/json"
@@ -22,7 +24,7 @@ export const GetFeedback = async () => {
 
 export const GetFeedbackByStatus = async (status) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/feedback?status=${status}`);
+      const response = await fetch(`${BaseApiUrl}/feedback?status=${status}`);
       const data = await response.json()
       console.log('fetch', data)
       return data;
@@ -34,7 +36,7 @@ export const GetFeedbackByStatus = async (status) => {
 
 export const PostFeedback = async (FormData) => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/feedback`, {
+      const response = await fetch(`${BaseApiUrl}/feedback`, {
        method: "POST",
        body: FormData
       });
@@ -54,7 +56,7 @@ export const PostFeedback = async (FormData) => {
 
 export const UpdateFeedback = async (id) => {
   try {
-     const response = await fetch(`http://127.0.0.1:8000/api/feedback/${id}`, {
+     const response = await fetch(`${BaseApiUrl}/feedback/${id}`, {
         method: "PUT"
      });
 
@@ -69,7 +71,7 @@ export const UpdateFeedback = async (id) => {
 
 export const DestroyFeedback = async (id) => {
     try {
-       const response = await fetch(`http://127.0.0.1:8000/api/feedback/${id}`, {
+       const response = await fetch(`${BaseApiUrl}/feedback/${id}`, {
           method: "DELETE"
        });
   

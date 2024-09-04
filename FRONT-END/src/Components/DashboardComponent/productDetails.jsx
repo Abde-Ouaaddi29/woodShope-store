@@ -4,6 +4,8 @@ import { DestroyProduct, ShowProduct } from "../../API/products";
 import UpdateProduct from "./updateProduct";
 import { MdDelete } from "react-icons/md";
 import { FiLoader } from "react-icons/fi";
+import { BASE_URL } from "../../constants";
+
 
 export default function ProductDetails() {
   const [currentProduct, setCurrentProduct] = useState();
@@ -13,7 +15,7 @@ export default function ProductDetails() {
   );
   const { id } = useParams();
   const navigate = useNavigate();
-  const baseUrl = "http://localhost:8000";
+  // const baseUrl = "http://localhost:8000";
 
 
   const fetchShowProduct = async () => {
@@ -74,7 +76,7 @@ export default function ProductDetails() {
         <div className="flex justify-center items-center ">
           <img
             className="hover:scale-125 transition-all duration-500"
-            src={`${baseUrl}/${currentProduct?.image}`} 
+            src={`${BASE_URL}/${currentProduct?.image}`} 
             alt={currentProduct?.name}
           /> 
         </div>

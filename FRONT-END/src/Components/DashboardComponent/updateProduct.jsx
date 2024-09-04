@@ -3,6 +3,7 @@ import { GetCategorie } from "../../API/categories";
 import { MdDone } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { EditProduct } from "../../API/products";
+import { BASE_URL } from "../../constants";
 
 export default function UpdateProduct({ currentProduct }) {
   const name = useRef();
@@ -11,7 +12,6 @@ export default function UpdateProduct({ currentProduct }) {
   const desc = useRef();
   const features = useRef();
   const category_id = useRef();
-  const baseUrl = "http://localhost:8000";
 
 
   const [ErrorName, setErrorName] = useState(false);
@@ -136,7 +136,7 @@ export default function UpdateProduct({ currentProduct }) {
                 />
                 <img
                   className="h-14"
-                  src={`${baseUrl}/${currentProduct?.image}`}
+                  src={`${BASE_URL}/${currentProduct?.image}`}
                   alt=""
                 />
               </div>

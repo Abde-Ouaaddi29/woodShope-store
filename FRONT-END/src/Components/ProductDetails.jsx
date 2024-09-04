@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { ShowProduct } from "../API/products";
 import { ShowCategory } from "../API/categories";
 import { FiLoader } from "react-icons/fi";
+import { BASE_URL } from "../constants.js";
 
 function ProductDetails() {
   const { id } = useParams();
@@ -13,7 +14,6 @@ function ProductDetails() {
   const [message, setMessage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [switchDescRev, setSwitchDescRev] = useState(true);
-  const BaseUrl = "http://127.0.0.1:8000";
 
   const showProduct = async () => {
     try {
@@ -27,8 +27,7 @@ function ProductDetails() {
       }
     } catch (error) {
       console.error(error);
-      setMessage('connection issue !');
-
+      setMessage("connection issue !");
     }
   };
 
@@ -46,6 +45,10 @@ function ProductDetails() {
     showProduct();
     showCtegory();
   }, [id, product]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   // const handleAddToCard = () => {
   //         if (!details) {
@@ -91,17 +94,19 @@ function ProductDetails() {
   //     }
   // }
 
-  if(!product){
-    return <div className="p-4 flex justify-center items-center text-2xl">
-         {message === "loading..." ? (
-                <>
-                  <span className="text-primary">loading...</span>{" "}
-                  <FiLoader className="ml-3 stroke-primary text-3xl loader " />
-                </>
-              ) : (
-                message
-              )}{" "}
-    </div>
+  if (!product) {
+    return (
+      <div className="p-4 flex justify-center items-center text-2xl">
+        {message === "loading..." ? (
+          <>
+            <span className="text-primary">loading...</span>{" "}
+            <FiLoader className="ml-3 stroke-primary text-3xl loader " />
+          </>
+        ) : (
+          message
+        )}{" "}
+      </div>
+    );
   }
 
   return (
@@ -111,7 +116,7 @@ function ProductDetails() {
           <div className="md:p-5">
             <img
               className="h-full w-full lg:hover:scale-[1.2] "
-              src={`${BaseUrl}/${product.image}`}
+              src={`${BASE_URL}/${product.image}`}
               alt={product.name}
             />
           </div>
@@ -226,16 +231,16 @@ function ProductDetails() {
         <h1 className="text-[48px] font-bold leading-tight ml-10 mb-5">
           Related products
         </h1>
-        
+
         <div className=" p-4">
-        {currentcategory ? 
-        <ProductList
-          products={currentcategory.product}
-          currentcategory={currentcategory}
-        />
-        :
-        <FiLoader className="ml-3 stroke-primary text-3xl loader " />
-        }
+          {currentcategory ? (
+            <ProductList
+              products={currentcategory.product}
+              currentcategory={currentcategory}
+            />
+          ) : (
+            <FiLoader className="ml-3 stroke-primary text-3xl loader " />
+          )}
         </div>
       </div>
     </section>

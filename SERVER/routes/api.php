@@ -1,30 +1,24 @@
 <?php
 
-use App\Http\Controllers\Auth\AdminAuthenticatedSessionController;
-use App\Http\Controllers\Auth\AdminRegisteredUserController;
-use App\Http\Controllers\Auth\UserAuthenticatedSessionController;
-use App\Http\Controllers\Auth\UserRegisteredController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\OrderItemController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\API\productController;
+use App\Http\Controllers\Auth\AuthAdminController;
+use App\Http\Controllers\Auth\AuthUserController;
+use App\Http\Controllers\API\CategoryController;
 use Illuminate\Support\Facades\Route;
 
-// Route::prefix('api')->group(function () {
+Route::middleware(['auth:sanctum', 'user'])->group(function () {
+    // Route::apiResource('categories', ControllersCategoryController::class);
+});
 
-    Route::post('user/register', [UserRegisteredController::class, 'register']);
-    Route::post('user/login', [UserAuthenticatedSessionController::class, 'login']);
-    Route::post('user/logout', [UserAuthenticatedSessionController::class, 'destroy']);
-
-    Route::post('admin/register', [AdminRegisteredUserController::class, 'register']);
-    Route::post('admin/login', [AdminAuthenticatedSessionController::class, 'login']);
-    Route::post('admin/logout', [AdminAuthenticatedSessionController::class, 'destroy']);
-
-// });
-
-Route::apiResource('products', ProductController::class);
 Route::apiResource('categories', CategoryController::class);
-Route::apiResource('orders', OrderController::class);
-Route::apiResource('orderItems', OrderItemController::class);
-Route::apiResource('feedback', FeedbackController::class);
+Route::apiResource('products', productController::class);
+
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    // Route::apiResource('products', productController::class);
+});
+
+Route::post('admin/register', [AuthAdminController::class, 'register']);
+Route::post('admin/login', [AuthAdminController::class, 'login']);
+
+Route::post('user/register', [AuthUserController::class, 'register']);
+Route::post('user/login', [AuthUserController::class, 'login']);
