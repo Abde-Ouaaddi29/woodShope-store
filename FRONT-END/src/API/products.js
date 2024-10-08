@@ -5,7 +5,7 @@ export const GetProducts = async () => {
         const response = await fetch(`${BaseApiUrl}/products`, {
             method:"GET",
             headers:{
-                "Content-Type":"application/json"
+                "accept":"application/json"
             }
         })
 
@@ -28,7 +28,7 @@ export const ShowProduct = async (id) => {
      const response = await fetch(`${BaseApiUrl}/products/${id}`, {
         method:"GET",
         headers: {
-            "Content-type":"application/json"
+            "accept":"application/json"
         },
      });
      const data = await response.json();
@@ -73,15 +73,26 @@ export const FilterProductByName = async (name) => {
     }
 };
 
+export const FilterProductBySort = async (sort) => {
+    try {
+        const response = await fetch(`${BaseApiUrl}/products?sort=${sort}`);
+        const data = await response.json()
+        console.log('sorted data ', data)
+        return data;
+
+    } catch (error) {
+        console.error(error.message)
+    }
+}
+
 export const PostProducts = async (formData) => {
     try { 
-        // const adminToken = localStorage.getItem('adminToken')
+        const AdminToken = localStorage.getItem('AdminToken')
         const response = await fetch(`${BaseApiUrl}/products`, {
             method:"POST",
-            credentials:"include",
             headers: {
-                "Content-type":"application/json",
-                //  "Authorization": `Bearer ${adminToken}`
+                 'accept': 'application/json',
+                 "Authorization": `Bearer ${AdminToken}`
             },
             body:formData
         })
@@ -91,7 +102,7 @@ export const PostProducts = async (formData) => {
             console.log('added product', data);
             return data;
           } else {
-            throw new Error('Failed to add any product');
+            console.log('Failed to add any product');
           }
 
     } catch (error) {
@@ -102,13 +113,12 @@ export const PostProducts = async (formData) => {
 
 export const EditProduct = async (formData, id) => {
     try {
-        // const adminToken = localStorage.getItem('adminToken')
+        const AdminToken = localStorage.getItem('AdminToken')
         const response = await fetch(`${BaseApiUrl}/products/${id}`, {
             method: "PUT",
-            credentials: "include" ,
             headers: {
-                "Content-type":"application/json",
-                //  "Authorization": `Bearer ${adminToken}`
+                 "accept":"application/json",
+                 "Authorization": `Bearer ${AdminToken}`
             },
             body: formData,
         });
@@ -117,7 +127,7 @@ export const EditProduct = async (formData, id) => {
 
         // Check if the response is not ok
         if (!response.ok) {
-            throw new Error(data.message || 'Failed to update product');
+            console.error(data.message || 'Failed to update product');
         }
 
         console.log('Updated data:', data);
@@ -125,24 +135,23 @@ export const EditProduct = async (formData, id) => {
 
     } catch (error) {
         console.error('Error updating product:', error.message);
-        throw error; // Re-throw the error for further handling if needed
     }
 };
 
 export const DestroyProduct = async (id) => {
  try {
-  const adminToken = localStorage.getItem('adminToken')
-  const response = await fetch(`${BaseApiUrl}/products/${id}`, {
-    method: "delete",
-    headers: {
-        "Content-type":"application/json",
-         "Authorization": `Bearer ${adminToken}`
-    },
+     const AdminToken = localStorage.getItem('AdminToken')
+     const response = await fetch(`${BaseApiUrl}/products/${id}`, {
+        method: "delete",
+        headers: {
+            "accept":"application/json",
+            "Authorization": `Bearer ${AdminToken}`
+        },
   });
 
-  const data = await response.json();
-  console.log('the product is deleted ', data);
-  return data;
+    const data = await response.json();
+    console.log('the product is deleted ', data);
+    return data;
 
  } catch (error) {
   console.log(error.message)

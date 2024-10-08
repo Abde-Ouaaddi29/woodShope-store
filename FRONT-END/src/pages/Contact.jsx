@@ -1,6 +1,39 @@
+import { useRef, useState } from "react";
 import SeeLastCol from "../Components/SeeLastCol";
 import { Link } from "react-router-dom";
+import { PostFeedback } from "../API/feedback";
 const Contact = () => {
+  const [info, setInfo] = useState({ name: "", email: "", message: "" });
+  const [messageError, setMessageError] = useState("");
+  const [messageSecc, setMessageSecc] = useState("");
+
+  console.log(info);
+
+  const HandleFeedback = async (e) => {
+    e.preventDefault();
+
+    const { name, email, message } = info;
+
+    if (name.trim() && email.trim() && message.trim()) {
+      try {
+        setMessageSecc("Message has been successfully added");
+        await PostFeedback({name, email, message})
+        console.log({name, email, message} );
+
+        setInfo({ name: "", email: "", message: "" });
+        setMessageError("");
+      } catch (err) {
+        console.log(err.message);
+      }
+    } else {
+      setMessageError("Please complete all fields!");
+      setMessageSecc("");
+    }
+  };
+
+  console.log(messageError);
+  console.log(messageSecc);
+
   return (
     <>
       <div className="">
@@ -140,39 +173,48 @@ const Contact = () => {
               Send Us A Message
             </h4>
             <div className="flex flex-col mt-2">
-              <label htmlFor="name">
-                Name <span className="text-red-600">*</span>
-              </label>
+              <label htmlFor="name">Name</label>
               <input
+                onChange={(e) => setInfo({ ...info, name: e.target.value })}
+                value={info.name}
                 type="text"
                 id="name"
                 className="border border-semi-black mt-2 px-4 py-1"
               />
             </div>
             <div className="flex flex-col mt-2">
-              <label htmlFor="email">
-                Email <span className="text-red-600">*</span>
-              </label>
+              <label htmlFor="email">Email</label>
               <input
+                onChange={(e) => setInfo({ ...info, email: e.target.value })}
+                value={info.email}
                 type="email"
                 id="email"
                 className="border border-semi-black mt-2 px-4 py-1"
               />
             </div>
             <div className="flex flex-col mt-2">
-              <label htmlFor="massege">
-                Massege <span className="text-red-600">*</span>
-              </label>
+              <label htmlFor="massege">Massege</label>
               <textarea
+                onChange={(e) => setInfo({ ...info, message: e.target.value })}
+                value={info.message}
                 cols="10"
                 className="border border-semi-black mt-2"
                 id="massege"
                 rows="4"
               ></textarea>
             </div>
-            <button className="px-6 py-2 bg-primary text-semi-black w-fit uppercase mt-3 ">
-              Submit
-            </button>
+            <div className="mt-3 flex justify-between items-center">
+              <button
+                onClick={HandleFeedback}
+                className="px-6 py-2 bg-primary text-semi-black w-fit uppercase  "
+              >
+                Submit
+              </button>
+              <div>
+                {messageError && <p className="text-red-400">{messageError}</p>}
+                {messageSecc && <p className="text-green-400">{messageSecc}</p>}
+              </div>
+            </div>
           </form>
         </div>
         <SeeLastCol />

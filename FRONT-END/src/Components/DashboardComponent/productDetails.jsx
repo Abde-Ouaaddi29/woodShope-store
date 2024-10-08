@@ -15,8 +15,6 @@ export default function ProductDetails() {
   );
   const { id } = useParams();
   const navigate = useNavigate();
-  // const baseUrl = "http://localhost:8000";
-
 
   const fetchShowProduct = async () => {
     try {
@@ -117,14 +115,14 @@ export default function ProductDetails() {
       </div>
       <div className="mt-14 border-t-2 w-full grid grid-cols-2  ">
         <div className="font-bold text-xl py-4 border-r border-b">Features</div>
-        <div className="py-6 pl-6 tracking-wide border-b">
+        <div className="py-6 px-6  tracking-wide border-b break-words">
           {" "}
           {currentProduct?.features}{" "}
         </div>
-        <div className="py-6 pr-6 tracking-wide border-b-2 border-r">
+        <div className="py-6 pr-6 tracking-wide border-b-2 border-r break-words">
           {currentProduct?.category.desc}
         </div>
-        <div className="p-4 border-b-2 font-bold text-xl"> category </div>
+        <div className="py-6 px-6 border-b-2 font-bold text-xl"> category </div>
       </div>
 
       <div className=" mt-10">

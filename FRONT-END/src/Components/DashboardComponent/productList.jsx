@@ -40,16 +40,13 @@ export default function ProductsList() {
           if (!filteredProducts.ok) {
             setLoading("No product");
           }
-
         } else {
           const products = await GetProducts();
           setProducts(products);
           if (!products.ok) {
             setLoading("No product");
           }
-
         }
-
       } catch (error) {
         console.error("Error fetching products:", error);
         setLoading("connection issue !");
@@ -58,6 +55,8 @@ export default function ProductsList() {
 
     fetchProducts();
   }, [selectedValue]);
+
+  console.log(loading);
 
   return (
     <div className="lg:mt-0 mt-10">
@@ -76,11 +75,15 @@ export default function ProductsList() {
             id="products"
           >
             <option value="">Choose category</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
+            {categories.length > 0
+              ? categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))
+              : 
+              <><option value="">No categories</option></>
+              }
           </select>
         </div>
       </div>
@@ -88,7 +91,15 @@ export default function ProductsList() {
         <ProductCart products={products} />
       ) : (
         <div className="flex items-center justify-center text-primary h-[70vh] text-2xl -z-10">
-          {loading === 'loading...' ? <> <span className="text-primary">Loading...</span>  <FiLoader className="ml-3 stroke-primary text-4xl loader -z-10" /></> : loading}
+          {loading === "loading..." ? (
+            <>
+              {" "}
+              <span className="text-primary">Loading...</span>{" "}
+              <FiLoader className="ml-3 stroke-primary text-4xl loader -z-10" />
+            </>
+          ) : (
+            loading
+          )}
         </div>
       )}
     </div>

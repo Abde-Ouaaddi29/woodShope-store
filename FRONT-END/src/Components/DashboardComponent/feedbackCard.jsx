@@ -63,7 +63,7 @@ export default function FeedbackCard({ feedback, fetchFeedback }) {
                     : "text-gray-300  line-through font-semibold cursor-pointer hover:underline transition-all inline-block"
                 }
               >
-                {item.user_id}
+                {item.name}
               </div>
               <div className="my-2 ml-3">
                 <span

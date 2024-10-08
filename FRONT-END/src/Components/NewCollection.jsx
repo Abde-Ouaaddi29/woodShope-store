@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { GetProducts } from "../API/products";
 import { FaLongArrowAltRight } from "react-icons/fa";
 import { GetCategorie } from "../API/categories";
+import { BASE_URL } from "../constants.js";
 
 export default function NewCollection() {
   const [products, setProducts] = useState([]);
@@ -102,29 +103,31 @@ export default function NewCollection() {
         </>
       )}
 
-      <div className="grid lg:grid-cols-4 xl:grid-cols-5 md:grid-cols-2 grid-cols-1 my-24  ">
-        {rooms &&
+      <div className="grid lg:grid-cols-4 xl:grid-cols-5 md:grid-cols-2 grid-cols-1 my-24 bg-gray-100">
+        {rooms.length > 0 ?
           rooms.map((item) => {
             return (
               <>
                 <CardCategory item={item} />
               </>
             );
-          })}
+          })
+        :
+        <> <div className="p-4 text-primary text-center w-full">  Rooms !!  </div> </>
+        }
       </div>
     </>
   );
 }
 
 const CardCategory = ({ item }) => {
-  const BaseUrl = "http://127.0.0.1:8000";
 
   return (
     <>
       <div className="h-[80vh] relative">
         <img
           className="w-full h-full object-cover"
-          src={`${BaseUrl}/${item.image}`}
+          src={`${BASE_URL}/${item.image}`}
           alt={item.name}
         />
         <div className="flex justify-center items-center group w-auto absolute bottom-9 left-7 z-20 ">

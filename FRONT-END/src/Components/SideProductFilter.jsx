@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { SETMINMAXPRICE, SETSEARCHVALUE } from "../REDUX/ProductReducer/ActionPr";
 
 const SideProductFilters = ({ handleToggleFilters }) => {
-  const [maxMinPrice, setMaxMinPrice] = useState([11, 100]);
+  const [maxMinPrice, setMaxMinPrice] = useState([11, 3456]);
   const [categories, setCategories] = useState([]);
   const [searchV, setSearchV] = useState("");
   const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const SideProductFilters = ({ handleToggleFilters }) => {
   }
 
   function handleFilterByPrice() {
-    if (maxMinPrice[0] !== 11 || maxMinPrice[1] !== 100) {
+    if (maxMinPrice[0] !== 11 || maxMinPrice[1] !== 3456) {
       dispatch(SETMINMAXPRICE(maxMinPrice));
     }
   }
@@ -98,7 +98,7 @@ const SideProductFilters = ({ handleToggleFilters }) => {
           <h4 className="mb-5 text-xl font-semibold">Product categories</h4>
           <ul className="flex flex-col gap-2 p-2 overflow-y-auto h-[200px] ">
             {/* { categories.length < 1 ? <span>no items</span> : ''} */}
-            {categories &&
+            {categories.length > 0 ?
               categories.map((item) => {
                 return (
                   <CategoryItem
@@ -107,7 +107,8 @@ const SideProductFilters = ({ handleToggleFilters }) => {
                     item={item}
                   />
                 );
-              })}
+              }):
+              <div className="bg-gray-100 flex justify-center p-4 rounded text-gray-400">no items</div>}
           </ul>
         </div>
       </div>
@@ -143,6 +144,8 @@ function RangeSlider({ maxMinPrice, setMaxMinPrice }) {
       value={maxMinPrice}
       onChange={handleChange}
       valueLabelDisplay="off"
+      min={9}
+      max={9000}
       disableSwap
     />
   );

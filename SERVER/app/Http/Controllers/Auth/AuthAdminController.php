@@ -25,7 +25,7 @@ class AuthAdminController extends Controller
             return response()->json([
                 'AdminToken' => $token,
                 'token_type' => 'Bearer',
-                'admin' => $admin
+                'admin' => $admin 
             ]);
         } else {
             return response()->json(['message' => 'the provided credentails are inccorect'], 401);

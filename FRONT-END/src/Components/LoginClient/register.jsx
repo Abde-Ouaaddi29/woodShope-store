@@ -18,6 +18,7 @@ export default function Register() {
     formData.append("email", email.current.value.trim());
     formData.append("password", password.current.value.trim());
 
+
     if (
       formData.get("name") &&
       formData.get("email") &&
@@ -141,7 +142,7 @@ export default function Register() {
             <button
               onClick={handleSubmit}
               className=" bg-yellow-500 px-4 py-2 rounded-sm text-white font-medium hover:bg-yellow-600 transition-all"
-              type="submit"
+              // type="submit"
             >
               submit
             </button>

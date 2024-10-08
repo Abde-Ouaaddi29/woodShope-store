@@ -1,17 +1,17 @@
-import React, {useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { EditCategory } from "../../API/categories";
 import { useParams } from "react-router-dom";
 
-export default function UpdateCategory({categorie}) {
+export default function UpdateCategory() {
   const [isCategorySent, setIsCategorySent] = useState(false);
   const [ErrorCateg, setErrorCateg] = useState(false);
 
   const newCategorie = useRef();
   const description = useRef();
-  const imageCategory = useRef();
+  // const imageCategory = useRef();
 
-  // const { id } = useParams();
-  console.log(categorie?.id);
+  const { id } = useParams();
+  // console.log(categorie?.id);
 
   // const fetchShowCategory = async () => {
   //   try {
@@ -36,38 +36,40 @@ export default function UpdateCategory({categorie}) {
     const formData = new FormData();
     formData.append("name", newCategorie.current.value.trim());
     formData.append("desc", description.current.value.trim());
-    formData.append("image", imageCategory.current.files[0]);
+    // formData.append("image", imageCategory.current.files[0]); // Uncomment if you have an image
+
     console.log("Form Data: ", [...formData.entries()]);
 
     if (
-      !formData.get("name") ||
-      !formData.get("desc") 
-      // !formData.get("image")
+      formData.get("name") ||
+      formData.get("desc")
+      // Add condition for the image if needed
     ) {
-      setErrorCateg(true);
-      setIsCategorySent(false);
-    } else {
       try {
-        const id = await categorie.id;
-
-        await EditCategory(formData, id);
-        newCategorie.current.value = "";
-        description.current.value = "";
-        imageCategory.current.value = "";
-
+        await EditCategory(formData, id); // Pass formData directly
         setIsCategorySent(true);
         setErrorCateg(false);
-
       } catch (error) {
-        console.error("Error posting category:", error);
+        console.error("Error updating category:", error);
       }
+    } else {
+      setErrorCateg(true);
+      setIsCategorySent(false);
     }
   };
+
+  useEffect(() => {
+    if (isCategorySent) {
+      newCategorie.current.value = "";
+      description.current.value = "";
+      // imageCategory.current.value = "";
+    }
+  }, [isCategorySent]);
 
   return (
     <>
       <div className="bg-gray-100 rounded-[10px] xl:px-14 px-5 py-10 shadow">
-        <form action="" className=" space-y-4 " encType="multipart/form-data">
+        <form action="" className=" space-y-4 " >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
             <div>
               <label className="" htmlFor="name">
@@ -107,7 +109,7 @@ export default function UpdateCategory({categorie}) {
                 // defaultValue={categorie.desc}
               />
             </div>
-            <div>
+            {/* <div>
               <label className="" htmlFor="imageCategory">
                 categorie image
               </label>
@@ -122,7 +124,7 @@ export default function UpdateCategory({categorie}) {
                 type="file"
                 ref={imageCategory}
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="mt-4">

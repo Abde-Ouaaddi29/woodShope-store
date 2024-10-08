@@ -36,8 +36,9 @@ export default function AddProduct() {
 
   const fetchCategories = async () => {
     try {
-      const categories = await GetCategorie();
-      dispatch(SETCATEGORIES(categories));
+      const response = await GetCategorie();
+      dispatch(SETCATEGORIES(response));
+      // if()
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -56,31 +57,34 @@ export default function AddProduct() {
     formData.append("image", imageCategory.current.files[0]);
 
     if (
-      !formData.get("name") ||
-      !formData.get("desc") ||
-      !formData.get("image")
+      formData.get("name") &&
+      formData.get("desc") &&
+      formData.get("image")
     ) {
-      setErrorCateg(true);
-      setIsCategorySent(false);
-    } else {
       try {
+        console.log(formData["name"]);
         await PostCategorie(formData);
-        newCategorie.current.value = "";
-        description.current.value = "";
-        imageCategory.current.value = "";
-
         setIsCategorySent(true);
-
         setErrorCateg(false);
         fetchCategories();
-        // setTimeout(() => {
-        //   navigate("/dashboard/categories");
-        // }, 2000);
+        setTimeout(() => {
+          navigate("/dashboard/categories");
+        }, 2000);
       } catch (error) {
-        console.error("Error posting category:", error);
+        console.error("Error posting category:", error.message);
       }
+    } else {
+      setErrorCateg(true);
+      setIsCategorySent(false);
     }
   };
+
+  useEffect(() => {
+    if (isCategorySent) {
+      newCategorie.current.value = "";
+      description.current.value = "";
+    }
+  }, [isCategorySent]);
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
@@ -140,6 +144,11 @@ export default function AddProduct() {
     if (isValid) {
       try {
         await PostProducts(formData);
+        setIsProductSent(true);
+        setTimeout(() => {
+          navigate("/dashboard/productsList");
+        }, 2000);
+
         name.current.value = "";
         image.current.value = "";
         price.current.value = "";
@@ -147,11 +156,6 @@ export default function AddProduct() {
         features.current.value = "";
         category_id.current.value = "";
 
-        setIsProductSent(true);
-
-        setTimeout(() => {
-          navigate("/dashboard/productsList");
-        }, 2000);
       } catch (error) {
         console.error("Error posting product:", error);
       }
@@ -186,7 +190,7 @@ export default function AddProduct() {
         )}
 
         <div className="bg-gray-100 rounded-[10px] xl:px-14 px-5 py-10 shadow">
-          <form action="" className=" space-y-4" encType="multipart/form-data">
+          <form className=" space-y-4" encType="multipart/form-data">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-1">
               <div>
                 <label className="" htmlFor="name">
@@ -206,7 +210,7 @@ export default function AddProduct() {
                 />
               </div>
               <div>
-                <label htmlFor="image">image</label>
+                <label htmlFor="imageProduct">image</label>
                 {ErrorImage ? <span className="text-red-400 ml-2">*</span> : ""}
 
                 <input
@@ -216,6 +220,7 @@ export default function AddProduct() {
                       : "w-full outline-yellow-300 mt-2 bg-white rounded-lg border border-gray-200 p-3 text-sm"
                   }
                   placeholder="image"
+                  name="imageProduct"
                   type="file"
                   ref={image}
                 />
@@ -258,7 +263,7 @@ export default function AddProduct() {
                   ref={category_id}
                 >
                   <option value="">choose...</option>
-                  {categories &&
+                  {categories.length > 0 ? (
                     categories.map((item, key) => {
                       return (
                         <>
@@ -268,7 +273,12 @@ export default function AddProduct() {
                           </option>{" "}
                         </>
                       );
-                    })}
+                    })
+                  ) : (
+                    <>
+                      <option value="">No categories</option>
+                    </>
+                  )}
                 </select>
               </div>
             </div>
@@ -407,7 +417,8 @@ export default function AddProduct() {
                     ? "w-full outline-yellow-300 mt-2 rounded-lg border border-red-200 p-3 text-sm bg-white"
                     : "w-full outline-yellow-300 mt-2 rounded-lg border border-gray-200 p-3 text-sm bg-white"
                 }
-                type="file"
+                type="file" 
+                name="imageCategory" 
                 ref={imageCategory}
               />
             </div>

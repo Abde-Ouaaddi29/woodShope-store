@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AdminLogin } from '../../../API/auth/adminAuth';
 import { MdDone } from 'react-icons/md';
 
@@ -7,6 +7,7 @@ export default function Admin() {
 
   const [isLogged, setIsLogged] = useState(false);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const email = useRef();
   const password = useRef();
@@ -30,7 +31,9 @@ export default function Admin() {
 
         setTimeout(() => {
           setIsLogged(false);
-        }, 4000);
+          navigate('/dashboard')
+        }, 3000);
+
       } else {
         setError("* data is not match ! please try again ");
         setIsLogged(false);

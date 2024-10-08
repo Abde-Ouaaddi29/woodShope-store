@@ -26,16 +26,19 @@ export const AdminLogin = async (formData) => {
     try {
         const response = await fetch(`${BaseApiUrl}/admin/login`, {
             method: "POST",
+            headers: {
+                'Accept': 'application/json',
+              },
             body: formData,
-            credentials: "include",
+            // credentials: "include",
         });
 
         const data = await response.json();
         console.log(data)
 
         if (response.ok) {
-            localStorage.setItem('adminToken', data.adminToken);
-            console.log(data.adminToken)
+            localStorage.setItem('AdminToken', data.AdminToken);
+            console.log(data.AdminToken)
             console.log('logged in')
             
             return data;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -36,17 +37,23 @@ class AuthUserController extends Controller
 
     public function register(Request $request): JsonResponse
     {
+        $admin = Admin::first();
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email|max:255',
-            'password' => 'required|string|min:8|max:255',
-            // 'admin_id' => 'required|string|min:8|max:255',
+            'password' => 'required|string|min:8|max:255'
         ]);
+
+        if(!$admin){
+            return response()->json(['message' => 'the admin does not exist !!'], 404);
+        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'admin_id' => $admin->id ,
         ]);
 
         return response()->json([
@@ -55,4 +62,10 @@ class AuthUserController extends Controller
         ], 201);
     }
 
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
 }

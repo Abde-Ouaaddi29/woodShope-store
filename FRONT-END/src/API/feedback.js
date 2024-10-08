@@ -34,30 +34,38 @@ export const GetFeedbackByStatus = async (status) => {
     }
    }
 
-export const PostFeedback = async (FormData) => {
+   export const PostFeedback = async (Data) => {
     try {
       const response = await fetch(`${BaseApiUrl}/feedback`, {
-       method: "POST",
-       body: FormData
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'application/json',
+        },
+        body: JSON.stringify(Data)
       });
-   
-      if(!response.ok){
-        console.log('could not post the feedback')
+  
+      if (!response.ok) {
+        console.log('Could not post the feedback');
+      } else {
+        const data = await response.json();
+        console.log('Posted successfully', data);
+        return data;
       }
-   
-      const data = await response.json()
-      console.log('it is posted successuffly', data)
-      return data;
-   
     } catch (error) {
-       console.log(error.message)
+      console.log(error.message);
     }
-}
-
+  };
+  
 export const UpdateFeedback = async (id) => {
   try {
+    const AdminToken = localStorage.getItem('AdminToken')
      const response = await fetch(`${BaseApiUrl}/feedback/${id}`, {
-        method: "PUT"
+        method: "PUT",
+        headers: {
+            'accept': 'application/json',
+            "Authorization": `Bearer ${AdminToken}`
+        }
      });
 
      const data = await response.json();
@@ -71,8 +79,13 @@ export const UpdateFeedback = async (id) => {
 
 export const DestroyFeedback = async (id) => {
     try {
+       const AdminToken = localStorage.getItem('AdminToken')
        const response = await fetch(`${BaseApiUrl}/feedback/${id}`, {
-          method: "DELETE"
+          method: "DELETE",
+          headers: {
+            'accept': 'application/json',
+            "Authorization": `Bearer ${AdminToken}`
+        }
        });
   
        const data = await response.json();

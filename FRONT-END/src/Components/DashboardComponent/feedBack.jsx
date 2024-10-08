@@ -7,7 +7,7 @@ export default function FeedBack() {
   const [feedback, setFeedback] = useState([]);
   const [messageLoading, setMessageLoading] = useState();
   const [selectedValue, setSelectedValue] = useState("");
-  const status = "post"
+  // const status = "post"
 
 
   const handleCHangeSelect = (e) => {
@@ -71,7 +71,7 @@ export default function FeedBack() {
           <option value="posted">posted</option>
         </select>
       </div>
-      {feedback && feedback.length >= 1 ? (
+      {feedback.length > 0 ? (
         <div className="overflow-y-auto lg:h-[80vh] h-[73vh] mt-2 p-4 lg:p-4 ">
           <FeedbackCard feedback={feedback} fetchFeedback={fetchFeedback}  />
         </div>

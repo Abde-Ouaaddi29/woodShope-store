@@ -220,12 +220,12 @@ function ProductDetails() {
           </span>
           <span
             onClick={() => setSwitchDescRev((prev) => !prev)}
-            className="cursor-pointer min-w-[106px] ml-5 text-[20px] font-bold"
+            className="cursor-pointer min-w-[106px] ml-5 text-[20px] font-bold "
           >
             features
           </span>
         </div>
-        {switchDescRev ? product.description : product.features}
+        {switchDescRev ? product.description : product.features} 
       </div>
       <div className="p-6">
         <h1 className="text-[48px] font-bold leading-tight ml-10 mb-5">

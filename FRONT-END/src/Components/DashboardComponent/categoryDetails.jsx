@@ -75,7 +75,7 @@ export default function CategoryDetails() {
           <span className=" text-primary font-light">products</span>
         </span>
       </div>
-      <div className=" lg:p-4  mb-4 grid lg:grid-cols-5 grid-cols-2 gap-4 ">
+      <div className=" lg:p-4  mb-4 grid lg:grid-cols-5 grid-cols-2 gap-4 cursor-pointer">
         {categorie.product ? (
           categorie.product.map((item, key) => {
             return (

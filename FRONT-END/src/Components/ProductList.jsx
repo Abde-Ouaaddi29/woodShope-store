@@ -13,7 +13,7 @@ export default function ProductList({ products, currentcategory }) {
           return (
             <li
               key={key}
-              className="py-3 shadow-xl lg:shadow-none relative group text-center hover:shadow-2xl hover:scale-105 transition-all duration-700 "
+              className="py-3 border hover:border-none relative group text-center hover:shadow-2xl hover:scale-105 transition-all duration-700 "
             >
               <div className="group-hover:grid place-content-center hidden group absolute top-0 right-0 py-2 justify-end px-4">
                 <div className="p-2 bg-primary justify-end hover:inline-block rounded-full hover:bg-yellow-400 hover:scale-105 transition-all duration-500 cursor-pointer">

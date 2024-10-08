@@ -4,6 +4,9 @@ export const UserRegister = async (formData) => {
     try {
         const response = await fetch(`${BaseApiUrl}/user/register`, {
             method: "POST",
+            // headers: {
+            //     'Accept': 'application/json',
+            //   },
             body: formData,
             // credentials: "include",
         });
@@ -26,6 +29,9 @@ export const UserLogin = async (formData) => {
     try {
         const response = await fetch(`${BaseApiUrl}/user/login`, {
             method: "POST",
+            headers: {
+                'Accept': 'application/json',
+              },
             body: formData,
             // credentials: "include",
         });
@@ -34,11 +40,9 @@ export const UserLogin = async (formData) => {
         console.log(data)
 
         if (response.ok) {
-            localStorage.setItem('userToken', data.userToken);
+            localStorage.setItem('UserToken', data.UserToken);
             console.log(data.userToken)
             console.log('logged in')
-            
-
             return data;
         } else {
             return null;

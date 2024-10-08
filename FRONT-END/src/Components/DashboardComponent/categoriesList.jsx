@@ -7,14 +7,20 @@ import { FiLoader } from "react-icons/fi";
 
 export default function CategoriesList() {
   const [categories, setCategories] = useState([]);
+  const [message, setMessage] = useState();
 
   const GetCategories = async () => {
     try {
+      setMessage("loading...");
       const response = await GetCategorie();
       setCategories(response);
       console.log(response);
+      if (!response.ok) {
+        setMessage("No categories");
+      }
     } catch (error) {
       console.log(error.message);
+      setMessage("connection issue !");
     }
   };
 
@@ -35,16 +41,22 @@ export default function CategoriesList() {
             </Link>
           </div>
         </div>
-        {categories && categories.length > 0 ? (
+        {categories.length > 0 ? (
           <div className="overflow-y-auto max-h-[73vh] mt-2 p-4">
             <CategoryCard categories={categories} />
           </div>
-        ) : 
+        ) : (
           <div className="flex items-center justify-center text-primary h-[70vh] text-2xl -z-10">
-          Loading...{" "}
-          <FiLoader className="ml-3 stroke-primary text-4xl loader -z-10" />
-        </div>
-         }
+            {message === "loading..." ? (
+              <div className="flex text-primary">
+                Loading...
+                <FiLoader className="ml-3 stroke-primary text-4xl loader -z-10" />
+              </div>
+            ) : (
+              message
+            )}
+          </div>
+        )}
       </div>
     </>
   );

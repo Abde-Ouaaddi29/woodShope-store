@@ -11,7 +11,7 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!auth()->check()) {
-            return response()->json(['message' => 'User not authenticated'], 401);
+            return response()->json(['message' => 'Admin not authenticated'], 401);
         }
 
         // Check if the authenticated user is from the admins table
