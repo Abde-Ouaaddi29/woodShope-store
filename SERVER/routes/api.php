@@ -31,9 +31,9 @@ Route::apiResource('orderItems', orderItemsController::class);
 
 ///// user routes /////
 
-Route::middleware(['auth:sanctum', 'user'])->group(function () {
+// Route::middleware(['auth:sanctum', 'user'])->group(function () {
  
-});
+// });
 
 
 
@@ -52,7 +52,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     Route::put('/feedback/{id}', [FeedbackController::class, 'update']);
     Route::delete('/feedback/{id}', [FeedbackController::class, 'destroy']);
-
 });
 
 route::middleware(['auth:sanctum'])->post('/logout', [AuthUserController::class, 'logout']);

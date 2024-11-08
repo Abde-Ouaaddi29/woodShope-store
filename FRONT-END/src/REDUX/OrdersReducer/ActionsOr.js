@@ -5,10 +5,10 @@ export const REMOVE_ORDER = "REMOVE_ORDER";
 export const UPDATE_COUNT_ORDER = "UPDATE_COUNT_ORDER";
 
 
-export const ADDTOCART = (data ,count) => {
+export const ADDTOCART = (data) => {
     return {
        type: ADD_TO_CART,
-       payload:{data,count}
+       payload:data
     }
 }
 

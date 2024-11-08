@@ -9,13 +9,15 @@ import {
   GetProducts,
 } from "../API/products";
 import { FiLoader } from "react-icons/fi";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SETPRODUCT } from "../REDUX/ProductReducer/ActionPr";
 
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [message, setMessage] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [selectSorting, setSelectSorting] = useState("");
+  const dispatch = useDispatch()
 
   const searchValue = useSelector((state) => state.products.searchValue);
   const MinMaxPrice = useSelector((state) => state.products.minMaxPrice);

@@ -20,13 +20,13 @@ return new class extends Migration
             $table->string('town');
             $table->string('phoneNumber');
             $table->string('remarks');
-            $table->string('payment_key');
-            $table->string('total_price');
+            // $table->string('payment_key');
+            $table->decimal('total_price', 8, 2);
             $table->string('status');
-            $table->unsignedBigInteger('user_id');
+            // $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            // $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
         });
     }
 

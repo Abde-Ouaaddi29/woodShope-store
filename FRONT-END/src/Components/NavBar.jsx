@@ -4,16 +4,27 @@ import darklogo from "../Assets/kayuu-Logo-dark.svg";
 import whitelogo from "../Assets/kayuu-Logo-white.svg";
 import PropTypes from "prop-types";
 import NavLinkItem from "./navLinkItem";
-import { useSelector } from "react-redux";
 import { RiShoppingBasketLine } from "react-icons/ri";
-
 
 const NavBar = ({ handleClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
   const [url, setUrl] = useState(location.pathname);
   const [isTrensparent, setIsTransparent] = useState(false);
-  const orders = useSelector((state) => state.orders.orders)
+  const [orders, setOrders] = useState([]);
+  // const orders = useSelector((state) => state.orders.orders)
+  
+  useEffect(() => {
+    const checkOrders = () => {
+      const orderItems = JSON.parse(sessionStorage.getItem("orderItems")) || [];
+      setOrders(orderItems);
+    };
+  
+    const intervalId = setInterval(checkOrders, 200);
+  
+    return () => clearInterval(intervalId);
+  }, []);
+  
 
   useEffect(() => {
     setUrl(location.pathname);
@@ -106,7 +117,6 @@ const NavBar = ({ handleClick }) => {
                 {orders.length}
               </div>
               <RiShoppingBasketLine className="fill-primary text-2xl" />
-              
             </button>
           </div>
         </div>

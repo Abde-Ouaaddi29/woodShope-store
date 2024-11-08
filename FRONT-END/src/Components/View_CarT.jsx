@@ -1,11 +1,16 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import {Link} from 'react-router-dom'
 
 export default function ViewCarT(){
+  const [orders, setOrders] = useState([])
 
-    const orders = useSelector((state) => state.orders.orders);
-    const dispatch = useDispatch()
+  useEffect(() => {
+    const orderList = JSON.parse(sessionStorage.getItem('orderItems') || [])
+    setOrders(orderList)
     console.log('from view cart',orders)
+  },[])
+
+    
     return(<>
       <section className="w-full p-5 xl:p-10 lg:p-10 bg-gray-100 flex flex-col justify-center items-center">
           <div className="w-full p-6 bg-white ">

@@ -13,7 +13,12 @@ function ProductDetails() {
   const [currentcategory, setCurrentcategory] = useState("");
   const [message, setMessage] = useState("");
   const [quantity, setQuantity] = useState(1);
+  // const [total, setTotal] = useState(quantity * product.price);
   const [switchDescRev, setSwitchDescRev] = useState(true);
+
+  // console.log(quantity)
+  // console.log(product.price)
+  // console.log(total)
 
   const showProduct = async () => {
     try {
@@ -69,6 +74,32 @@ function ProductDetails() {
   //       setQuantity(existingOrder.count);
   //     }
   //   }, [id, orders]);
+  
+  
+  //////////// add product to session ////////
+  const handleAddToCard = () => {
+    const NewOrdderItem = {
+      productID: product.id,
+      quantity: quantity,
+      total: quantity * product.price,
+    };
+
+    let orderItems = JSON.parse(sessionStorage.getItem("orderItems")) || [];
+
+    const currentOrderItems = orderItems.find((item) => item.productID == product.id);
+
+    if (currentOrderItems) {
+      console.log(currentOrderItems);
+      currentOrderItems.quantity += quantity;
+      currentOrderItems.total = currentOrderItems.quantity * product.price
+      console.log("exist");
+    } else {
+      orderItems.push(NewOrdderItem);
+    }
+
+    sessionStorage.setItem("orderItems", JSON.stringify(orderItems));
+        
+  };
 
   const handleClickQuantity = (event) => {
     switch (event.target.name) {
@@ -164,7 +195,7 @@ function ProductDetails() {
               </span>
               <span>
                 <input
-                  //   onChange={handleChangeQuantity}
+                  // onChange={handleChangeQuantity}
                   className="w-[40px] h-[42px] text-center text-semi-black border border-semi-black focus:border-dashed  outline-none"
                   type="text"
                   name="quantity"
@@ -185,7 +216,7 @@ function ProductDetails() {
             <div>
               <button
                 className="bg-primary px-7 py-3 text-semi-black text-[0.75rem]  mt-3 sm:mt-0 sm:ml-5 hover:text-semi-white font-medium leading-tight uppercase tracking-wider"
-                // onClick={handleAddToCard}
+                onClick={handleAddToCard}
               >
                 add to card
               </button>
@@ -225,7 +256,7 @@ function ProductDetails() {
             features
           </span>
         </div>
-        {switchDescRev ? product.description : product.features} 
+        {switchDescRev ? product.description : product.features}
       </div>
       <div className="p-6">
         <h1 className="text-[48px] font-bold leading-tight ml-10 mb-5">
