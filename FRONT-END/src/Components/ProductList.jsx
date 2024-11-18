@@ -10,13 +10,14 @@ export default function ProductList({ products, currentcategory }) {
   const handleAddToCard = (id) => {
     console.log(id)
     const product = productslist.find((item) => item.id == id)
+    let orderItems = JSON.parse(sessionStorage.getItem("orderItems")) || [];
+    // const currentOrder = orderItems.find(item => item.productID == id)
 
     const NewOrdderItem = {
       productID: product.id,
       quantity: 1,
-      // total: quantity * product.price,
+      total: product.price,
     };
-    let orderItems = JSON.parse(sessionStorage.getItem("orderItems")) || [];
 
     const currentOrderItems = orderItems.find(
       (item) => item.productID == id

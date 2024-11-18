@@ -9,12 +9,12 @@ export default function CardSide({ toggle }) {
   const [orders, setOrders] = useState([]);
   const [message, setMessage] = useState("");
 
-  console.log("FROM CARDSIDE", products);
+  // console.log("FROM CARDSIDE", products);
 
   useEffect(() => {
     const checkOrders = () => {
       const orderItems = JSON.parse(sessionStorage.getItem("orderItems")) || [];
-      console.log("orderItems", orderItems);
+      // console.log("orderItems", orderItems);
       setOrders(orderItems);
     };
 
@@ -23,8 +23,9 @@ export default function CardSide({ toggle }) {
     return () => clearInterval(intervalId);
   }, []);
 
+
   // const orders = JSON.parse(sessionStorage.getItem("orderItems")) || [];
-  console.log("orders", orders);
+  // console.log("orders", orders);
 
   const increment = (id) => {
     const updateOrderItem = orders.map((order) => {
@@ -86,6 +87,14 @@ export default function CardSide({ toggle }) {
     fetchProduct();
   }, []);
 
+  ////// delete order ///////
+  const HandleDeleteOrder = (id) => {
+    const orderList = JSON.parse(sessionStorage.getItem("orderItems") || []);
+    const updatedOrders = orderList.filter((item) => item.productID != id);
+    sessionStorage.setItem("orderItems", JSON.stringify(updatedOrders));
+    setOrders(updatedOrders);
+  };
+
   if (isToggle) {
     return (
       <>
@@ -138,9 +147,7 @@ export default function CardSide({ toggle }) {
                           </Link>
                         </div>
                         <div
-                          onClick={() => {
-                            // dispatch(REMOVEORDER(order.id));
-                          }}
+                          onClick={() => {HandleDeleteOrder(order.productID)}}
                           className="cursor-pointer"
                         >
                           <svg

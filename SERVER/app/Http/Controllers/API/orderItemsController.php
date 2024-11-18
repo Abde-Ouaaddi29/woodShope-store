@@ -23,16 +23,18 @@ class orderItemsController extends Controller
      */
     public function store(Request $request)
     {
-       $product = Product::find($request->product_id);
+        // $orderItems = session('orderItems');
+        dd($request);
+    //    $product = Product::find($request->product_id);
 
-       $cardItem = [
-            'quantity' => $request->quantity,
-            'price' => $product->price,
-            'total' => $request->quantity * $product->price,
-            'product_id' => $request->product_id,
-        ];
+    //    $cardItem = [
+    //         'quantity' => $request->quantity,
+    //         'price' => $product->price,
+    //         'total' => $request->quantity * $product->price,
+    //         'product_id' => $request->product_id,
+    //     ];
 
-        return response()->json($cardItem);
+        // return response()->json($orderItems);
     }
 
     /**

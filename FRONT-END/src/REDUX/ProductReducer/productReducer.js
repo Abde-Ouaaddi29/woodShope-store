@@ -1,7 +1,8 @@
+import { GetProducts } from "../../API/products";
 import { DELETE_PRODUCT, SET_CATEGORIES, SET_MINMAX_PRICE, SET_PRODUCT, SET_SEARCHVALUE } from "./ActionPr";
 
 const initialValues = {
-    products:[],
+    products: await GetProducts(),
     categories:[],
     searchValue:"",
     minMaxPrice:[],
@@ -11,7 +12,9 @@ export const ProductReducer = (state = initialValues , action) => {
 
  switch(action.type){
         case SET_PRODUCT: 
-          return { ...state, products:action.payload };
+          return { ...state, 
+            // products: await GetProducts()
+         };
 
         case SET_SEARCHVALUE:
             return { ...state, searchValue:action.payload };  

@@ -48,6 +48,7 @@ export default function AddProduct() {
     fetchCategories();
   }, []);
 
+  ////////////////  add category ////////////////// 
   const HandleAddCategorie = async (e) => {
     e.preventDefault();
     setIsCategorySent(false);
@@ -86,6 +87,7 @@ export default function AddProduct() {
     }
   }, [isCategorySent]);
 
+  ////////////////  add product ////////////////// 
   const handleAddProduct = async (e) => {
     e.preventDefault();
     setIsProductSent(false);

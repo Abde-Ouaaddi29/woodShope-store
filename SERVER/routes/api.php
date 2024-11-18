@@ -35,8 +35,6 @@ Route::apiResource('orderItems', orderItemsController::class);
  
 // });
 
-
-
 //// admin routes ////
 
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {

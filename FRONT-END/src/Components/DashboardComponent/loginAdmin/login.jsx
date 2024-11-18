@@ -35,11 +35,11 @@ export default function Admin() {
         }, 3000);
 
       } else {
-        setError("* data is not match ! please try again ");
+        setError("* les donnees sont incorrect ! ");
         setIsLogged(false);
       }
     } else {
-      setError("* fields are not complete ! ");
+      setError("* fields sont pas complete ! ");
       setTimeout(() => {
         setError("");
       }, 6000);
