@@ -59,7 +59,7 @@ export const PostCategorie = async (formData) => {
       console.log(data);
         return data;
     } else {
-        console.error('Error fetching categories:', response.statusText);
+        console.error('Error networking:', response.statusText);
     }
   } catch (error) {
     console.error(error.message);

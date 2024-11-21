@@ -12,7 +12,7 @@ function Checkout() {
   // const [products, setProducts] = useState([])
 
   const orderItems = JSON.parse(sessionStorage.getItem("orderItems") || "[]");
-  const products = useSelector((state) => state.products.products);
+  const products = useSelector((state) => state.products?.products);
   console.log(orderItems);
   console.log(products);
 
@@ -47,28 +47,26 @@ function Checkout() {
 
   ////////// function to add order_items
   const OrderItemsPosted = async () => {
-    let ProductID = "";
-    let price = "";
-    let quantity = "";
-    let total = "";
 
-    orderItems.map((item) => {
-      const currentProduct = products.find(
+  orderItems.map((item) => {
+      const currentProduct = products?.find(
         (product) => product.id == item.productID
       );
 
-      const Data = [
-        (ProductID = item.productID),
-        (price = currentProduct.id),
-        (quantity = item.quantity),
-        (total = item.total),
-      ];
+      const Data = 
+        {
+          ProductID : item.productID,
+          price : currentProduct.price,
+          quantity : item.quantity,
+          total : item.total,
+        }
+      
       console.log("Data", Data);
-      PostOrderItems(Data);
+      // PostOrderItems(Data);
     });
   };
 
-  OrderItemsPosted();
+  
 
   ////////// function to add order
   // const PostMainOrder = async () => {};
@@ -236,7 +234,7 @@ function Checkout() {
             )}
           </div>
 
-          <div className="p-8 pb-16 ">
+          <div className="p-8 pb-16 " onClick={() => OrderItemsPosted()}>
             <button className="flex items-center justify-center bg-primary  w-full   px-10 py-2 text-black hover:text-white">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

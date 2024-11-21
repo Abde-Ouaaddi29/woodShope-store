@@ -121,7 +121,7 @@ export default function CardSide({ toggle }) {
                 let currentProduct = products.find(
                   (product) => product.id == order.productID
                 );
-                console.log("pro", currentProduct);
+                // console.log("pro", currentProduct);
                 return (
                   <div
                     key={order.id}
